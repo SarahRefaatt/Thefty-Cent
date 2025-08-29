@@ -6,9 +6,12 @@ import { motion } from "framer-motion"
 import { InView } from "react-intersection-observer"
 import { useState } from "react"
 import { IconShoppingCart, IconHeart, IconStarFilled, IconEye } from "@tabler/icons-react"
+import { Link } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export default function EcommerceProductGrid() {
-  
+    const router = useRouter();
+
   const products = [
     { 
       id: 1, 
@@ -158,31 +161,32 @@ export default function EcommerceProductGrid() {
   return (
 <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 sm:px-6 lg:px-8">
   <div className="max-w-7xl mx-auto">
-    <div className="mb-16">
-      {/* Full-width minimalist header */}
-      <div className="w-screen relative left-1/2 right-1/2 -mx-[50vw] mb-12 bg-gray-900 dark:bg-gray-800">
-        <div className="relative h-[50vh] overflow-hidden flex items-center justify-center">
-          <img 
-            src="/assets/IMG.JPG" 
-            alt="Fashion Store" 
-            className="w-full h-full object-contain opacity-100"
-          />
-          <div className="absolute inset-0 flex items-center justify-center bg-black/40 dark:bg-black/60">
-            {/* Overlay text if enabled */}
-          </div>
-        </div>
-      </div>
-
-      {/* Featured products title */}
-      <div className="max-w-7xl mx-auto px-4 text-center">
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+   <div className="mb-16">
+  {/* Full-width minimalist header */}
+ <div className="mb-16">
+  {/* Full-width minimalist header */}
+  <div className="w-screen relative left-1/2 right-1/2 -mx-[50vw] mb-12 bg-black">
+    <div className="relative h-[50vh] overflow-hidden flex items-center justify-center">
+      <img 
+        src="/assets/IMG.JPG" 
+        alt="Coin" 
+        className="w-40 h-40 object-contain animate-coin-roll"
+      />
+      <div className="absolute inset-0 flex items-center justify-center">
+        {/* Overlay text */}
+        <h2 className="text-3xl font-bold text-white sm:text-4xl">
           Featured Products
         </h2>
-        <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+        <p className="mt-4 text-lg text-gray-400">
           Discover our most popular items
         </p>
       </div>
     </div>
+  </div>
+</div>
+
+</div>
+
 
     <InView triggerOnce rootMargin="0px 0px -250px 0px">
       {({ inView, ref }) => (
@@ -218,9 +222,12 @@ export default function EcommerceProductGrid() {
                 />
                 {/* Action buttons */}
                 <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2">
-                  <button className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-                    <IconEye size={20} />
-                  </button>
+                  <button
+        onClick={() => router.push(`/${product.id}`)}
+        className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+      >
+        <IconEye size={20} />
+      </button>
                   {/* <button className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
                     +
                   </button> */}

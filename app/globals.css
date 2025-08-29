@@ -111,6 +111,22 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
+@keyframes coin-roll {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(1440deg); /* 4 full spins before stopping */
+  }
+}
+
+.animate-coin-roll {
+  animation: coin-roll 1s cubic-bezier(0.001 , 0.3, 0.6, 1) 1;
+  transform-style: preserve-3d;
+}
+
+
+
 
 @layer base {
   * {
