@@ -639,40 +639,7 @@ export default function ProductDetailPage() {
           </div>
         </div>
         
-        {/* Related Products Section */}
-        <div className="mt-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">You might also like</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products.filter(p => p.id !== product.id).slice(0, 4).map(relatedProduct => (
-              <motion.div
-                key={relatedProduct.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
-              >
-                <div className="relative h-48 overflow-hidden">
-                  <Image
-                  width={160}
-                    height={160}
-                    src={relatedProduct.images[0]} 
-                    alt={relatedProduct.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-4">
-                  <h3 className="font-medium text-gray-900 mb-1">{relatedProduct.name}</h3>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-900 font-bold">{relatedProduct.price}</span>
-                    {relatedProduct.originalPrice && (
-                      <span className="text-gray-500 text-sm line-through">{relatedProduct.originalPrice}</span>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+   
       </div>
     </div>
   );
