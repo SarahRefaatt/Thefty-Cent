@@ -170,6 +170,8 @@ export default function EcommerceProductGrid() {
       <Image 
           height={160}
                 width={160}
+                unoptimized
+                priority
         src="/assets/IMG.JPG" 
         alt="Coin" 
        
