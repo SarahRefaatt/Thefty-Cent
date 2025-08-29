@@ -514,31 +514,7 @@ export default function ProductDetailPage() {
               </div>
               
               {/* Color Selection */}
-              {/* {product.colors && product.colors.length > 0 && (
-                <div className="mb-6">
-                  <h3 className="text-sm font-medium text-gray-900 mb-2">Color</h3>
-                  <div className="flex space-x-2">
-                    {product.colors.map((color) => (
-                      <button
-                        key={color}
-                        onClick={() => setSelectedColor(color)}
-                        className={`w-8 h-8 rounded-full border-2 ${
-                          selectedColor === color
-                            ? 'border-blue-500'
-                            : 'border-gray-300'
-                        }`}
-                        style={{ 
-                          backgroundColor: color.toLowerCase().includes('black') ? '#000' : 
-                                          color.toLowerCase().includes('silver') ? '#c0c0c0' : 
-                                          color.toLowerCase().includes('blue') ? '#0000ff' : '#ccc'
-                        }}
-                        aria-label={color}
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
-               */}
+           
               {/* Size Selection */}
               {product.sizes && product.sizes.length > 0 && (
                 <div className="mb-6">
