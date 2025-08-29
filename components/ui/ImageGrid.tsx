@@ -161,15 +161,19 @@ export default function EcommerceProductGrid() {
   return (
 <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 sm:px-6 lg:px-8">
   <div className="max-w-7xl mx-auto">
-   <div className="mb-16">
+   <div className="">
   {/* Full-width minimalist header */}
- <div className="mb-16">
+ <div className="">
   {/* Full-width minimalist header */}
   <div className="w-screen relative left-1/2 right-1/2 -mx-[50vw] mb-12 bg-black">
     <div className="relative h-[50vh] overflow-hidden flex items-center justify-center">
       <Image 
+          height={160}
+                width={160}
         src="/assets/IMG.JPG" 
         alt="Coin" 
+       
+        
         className="w-40 h-40 object-contain animate-coin-roll"
       />
       <div className="absolute inset-0 flex items-center justify-center">
@@ -188,12 +192,11 @@ export default function EcommerceProductGrid() {
 </div>
 
 
-    <InView triggerOnce rootMargin="0px 0px -250px 0px">
-      {({ inView, ref }) => (
         <motion.div
-          ref={ref}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
+          // ref={ref}
+            initial="hidden"
+  animate="visible"
+          // animate={inView ? "visible" : "hidden"}
           variants={{
             hidden: { opacity: 0 },
             visible: {
@@ -216,6 +219,8 @@ export default function EcommerceProductGrid() {
               {/* Product Image */}
               <div className="relative overflow-hidden">
                 <Image
+                height={160}
+                width={160}
                   src={product.image} 
                   alt={product.name}
                   className="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300"
@@ -228,9 +233,7 @@ export default function EcommerceProductGrid() {
       >
         <IconEye size={20} />
       </button>
-                  {/* <button className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-                    +
-                  </button> */}
+                
                 </div>
               </div>
 
@@ -258,8 +261,7 @@ export default function EcommerceProductGrid() {
             </motion.div>
           ))}
         </motion.div>
-      )}
-    </InView>
+
   </div>
 </div>
 

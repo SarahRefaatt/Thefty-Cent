@@ -32,14 +32,15 @@ export default function OrderConfirmation() {
       name: "Premium Denim Jacket",
       price: 89.99,
       quantity: 1,
-      image: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                      image:"/assets/IMG.JPG" 
+
     },
     {
       id: 2,
       name: "Classic White Sneakers",
       price: 75.50,
       quantity: 1,
-      image: "https://images.unsplash.com/photo-1534030347209-467a5b0ad3e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                      image:"/assets/IMG.JPG" 
     }
   ])
 
@@ -176,6 +177,8 @@ export default function OrderConfirmation() {
                 {orderItems.map(item => (
                   <div key={item.id} className="flex items-center gap-4">
                     <Image
+                    width={160}
+                    height={160}
                       src={item.image} 
                       alt={item.name}
                       className="w-16 h-16 object-cover rounded-md"

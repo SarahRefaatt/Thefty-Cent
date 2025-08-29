@@ -466,6 +466,8 @@ export default function ProductDetailPage() {
                     }`}
                   >
                     <Image
+                    width={160}
+                    height={160}
                       src={image} 
                       alt={`${product.name} view ${index + 1}`}
                       className="w-full h-full object-cover"
@@ -651,6 +653,8 @@ export default function ProductDetailPage() {
               >
                 <div className="relative h-48 overflow-hidden">
                   <Image
+                  width={160}
+                    height={160}
                     src={relatedProduct.images[0]} 
                     alt={relatedProduct.name}
                     className="w-full h-full object-cover"

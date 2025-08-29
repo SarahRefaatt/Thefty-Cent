@@ -37,6 +37,8 @@ export default function ImageCoinRoll() {
             {/* Coin front */}
             <div className="absolute inset-0 rounded-full overflow-hidden backface-hidden">
               <Image
+              width={160}
+                    height={160}
                 src="/assets/IMG.JPG" 
                 alt="Coin Front" 
                 className="w-full h-full object-cover"
@@ -47,6 +49,8 @@ export default function ImageCoinRoll() {
             {/* Coin back */}
             <div className="absolute inset-0 rounded-full overflow-hidden backface-hidden rotate-y-180 bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center">
                             <Image
+                            width={160}
+                    height={160}
                 src="/assets/IMG - Copy.JPG"
 
                 alt="Coin Front" 

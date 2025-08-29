@@ -108,6 +108,8 @@ export default function Cart() {
                 {cartItems.map(item => (
                   <div key={item.id} className="p-6 flex flex-col sm:flex-row items-start gap-4">
 <Image
+width={160}
+                    height={160}
                       src={item.image} 
                       alt={item.name}
                       className="w-24 h-24 object-cover rounded-md"
