@@ -186,6 +186,10 @@ export default function EcommerceProductGrid() {
         </p>
       </div>
     </div>
+
+
+
+    
   </div>
 </div>
 
@@ -253,10 +257,19 @@ export default function EcommerceProductGrid() {
                     </span>
                   )}
                 </div>
+<div className="mt-4 flex items-center gap-2">
+  <button className="flex-1 bg-gray-900 dark:bg-gray-700 text-white py-2 px-4 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors">
+    Add to Cart
+  </button>
 
-                <button className="mt-4 w-full bg-gray-900 dark:bg-gray-700 text-white py-2 px-4 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors">
-                  Add to Cart
-                </button>
+  <button
+    onClick={() => router.push(`/${product.id}`)}
+    className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+  >
+    <IconEye size={20} />
+  </button>
+</div>
+
               </div>
             </motion.div>
           ))}
