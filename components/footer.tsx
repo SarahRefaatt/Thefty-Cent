@@ -1,5 +1,7 @@
 "use client"
 
+import Link from "next/link"
+
 export default function Footer() {
   return (
     <footer className="bg-black text-white pt-16 pb-8">
@@ -38,15 +40,16 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-6">Quick Links</h3>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">Home</a>
+                <Link href="/" className="text-gray-400 hover:text-white transition-colors">Home</Link>
               </li>
                <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">Contact Us</a>
+                <Link href="0000" className="text-gray-400 hover:text-white transition-colors">Contact Us</Link>
               </li>
            
               <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">Shipping & Returns</a>
-              </li>
+  <Link href="/policies" className="text-gray-400 hover:text-white transition-colors">
+    Shipping & Returns
+  </Link>              </li>
         
             </ul>
           </div>
