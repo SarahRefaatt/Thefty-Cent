@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
+import Image from "next/image";
 
 interface OrderItem {
   id: number
@@ -123,7 +124,7 @@ export default function OrderConfirmed() {
               <div className="space-y-4">
                 {orderItems.map(item => (
                   <div key={item.id} className="flex items-center gap-4">
-                    <img 
+                    <Image
                       src={item.image} 
                       alt={item.name}
                       className="w-16 h-16 object-cover rounded-md"
@@ -167,7 +168,7 @@ export default function OrderConfirmed() {
           
           {/* Next Steps */}
           <div className="bg-blue-50 rounded-lg p-6 mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">What's Next?</h2>
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">What is Next?</h2>
             
             <div className="space-y-4">
               <div className="flex items-start">
@@ -178,7 +179,7 @@ export default function OrderConfirmed() {
                 </div>
                 <div>
                   <h3 className="font-medium text-gray-800">Order Processing</h3>
-                  <p className="text-sm text-gray-600">We're preparing your order for shipment. This usually takes 1-2 business days.</p>
+                  <p className="text-sm text-gray-600">We are preparing your order for shipment. This usually takes 1-2 business days.</p>
                 </div>
               </div>
               
@@ -190,7 +191,7 @@ export default function OrderConfirmed() {
                 </div>
                 <div>
                   <h3 className="font-medium text-gray-800">Shipping Confirmation</h3>
-                  <p className="text-sm text-gray-600">You'll receive a shipping confirmation email with tracking information once your order ships.</p>
+                  <p className="text-sm text-gray-600">You will receive a shipping confirmation email with tracking information once your order ships.</p>
                 </div>
               </div>
               

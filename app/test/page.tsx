@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 export default function ImageCoinRoll() {
   const [isRolling, setIsRolling] = useState(false);
@@ -34,7 +35,7 @@ export default function ImageCoinRoll() {
           <div className={`relative w-full h-full ${isRolling ? 'animate-coin-roll' : ''}`}>
             {/* Coin front */}
             <div className="absolute inset-0 rounded-full overflow-hidden backface-hidden">
-              <img 
+              <Image
                 src="/assets/IMG.JPG" 
                 alt="Coin Front" 
                 className="w-full h-full object-cover"
@@ -44,7 +45,7 @@ export default function ImageCoinRoll() {
             
             {/* Coin back */}
             <div className="absolute inset-0 rounded-full overflow-hidden backface-hidden rotate-y-180">
-              <img 
+              <Image
                 src="/assets/IMG - Copy.JPG"
                 alt="Coin Back" 
                 className="w-full h-full object-cover"

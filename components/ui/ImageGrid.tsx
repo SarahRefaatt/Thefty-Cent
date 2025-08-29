@@ -4,10 +4,10 @@
 
 import { motion } from "framer-motion"
 import { InView } from "react-intersection-observer"
-import { useState } from "react"
-import { IconShoppingCart, IconHeart, IconStarFilled, IconEye } from "@tabler/icons-react"
-import { Link } from "lucide-react"
+
 import { useRouter } from "next/navigation"
+import Image from "next/image";
+import { IconEye } from "@tabler/icons-react";
 
 export default function EcommerceProductGrid() {
     const router = useRouter();
@@ -167,7 +167,7 @@ export default function EcommerceProductGrid() {
   {/* Full-width minimalist header */}
   <div className="w-screen relative left-1/2 right-1/2 -mx-[50vw] mb-12 bg-black">
     <div className="relative h-[50vh] overflow-hidden flex items-center justify-center">
-      <img 
+      <Image 
         src="/assets/IMG.JPG" 
         alt="Coin" 
         className="w-40 h-40 object-contain animate-coin-roll"
@@ -215,7 +215,7 @@ export default function EcommerceProductGrid() {
             >
               {/* Product Image */}
               <div className="relative overflow-hidden">
-                <img 
+                <Image
                   src={product.image} 
                   alt={product.name}
                   className="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300"

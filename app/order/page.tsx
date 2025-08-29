@@ -1,8 +1,8 @@
 "use client"
 
-import { Router } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import Image from "next/image";
 
 interface OrderItem {
   id: number
@@ -138,7 +138,7 @@ export default function OrderConfirmation() {
               Thank you for your order. Your order number is <span className="font-semibold">#ORD-2023-7892</span>.
             </p>
             <p className="text-gray-600 mb-8">
-              We've sent a confirmation email to <span className="font-semibold">{formData.email}</span> with your order details.
+              We have sent a confirmation email to <span className="font-semibold">{formData.email}</span> with your order details.
             </p>
             
             <div className="flex justify-center gap-4">
@@ -175,7 +175,7 @@ export default function OrderConfirmation() {
               <div className="space-y-4 mb-6">
                 {orderItems.map(item => (
                   <div key={item.id} className="flex items-center gap-4">
-                    <img 
+                    <Image
                       src={item.image} 
                       alt={item.name}
                       className="w-16 h-16 object-cover rounded-md"

@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams,  } from "next/navigation";
 import { motion } from "framer-motion";
-import { Params } from "zod/v4/core";
+import Image from "next/image";
 
 // Define the Product interface
 interface Product {
@@ -465,7 +465,7 @@ export default function ProductDetailPage() {
                       selectedImage === index ? 'border-blue-500' : 'border-gray-200'
                     }`}
                   >
-                    <img 
+                    <Image
                       src={image} 
                       alt={`${product.name} view ${index + 1}`}
                       className="w-full h-full object-cover"
@@ -650,7 +650,7 @@ export default function ProductDetailPage() {
                 className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
               >
                 <div className="relative h-48 overflow-hidden">
-                  <img 
+                  <Image
                     src={relatedProduct.images[0]} 
                     alt={relatedProduct.name}
                     className="w-full h-full object-cover"

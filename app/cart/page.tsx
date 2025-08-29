@@ -1,7 +1,8 @@
 "use client"
 
 import { useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState,  } from 'react'
+import Image from "next/image";
 
 interface CartItem {
   id: number
@@ -36,8 +37,8 @@ export default function Cart() {
     }
   ])
 
-  const [shippingCost, setShippingCost] = useState(9.99)
-  const [taxRate, setTaxRate] = useState(0.08) // 8% tax
+  const [shippingCost, ] = useState(9.99)
+  const [taxRate, ] = useState(0.08) // 8% tax
     const router = useRouter();
 
   // Calculate cart totals
@@ -77,7 +78,7 @@ export default function Cart() {
           <div className="bg-white rounded-lg shadow-md p-8 text-center">
             <div className="text-6xl text-gray-200 mb-4">🛒</div>
             <h2 className="text-2xl font-semibold text-gray-700 mb-4">Your cart is empty</h2>
-            <p className="text-gray-500 mb-6">Looks like you haven't added any items to your cart yet.</p>
+            <p className="text-gray-500 mb-6">Looks like you have not added any items to your cart yet.</p>
             <button 
               className="bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition-colors"
               onClick={() => window.history.back()}
@@ -106,7 +107,7 @@ export default function Cart() {
               <div className="divide-y divide-gray-200">
                 {cartItems.map(item => (
                   <div key={item.id} className="p-6 flex flex-col sm:flex-row items-start gap-4">
-                    <img 
+<Image
                       src={item.image} 
                       alt={item.name}
                       className="w-24 h-24 object-cover rounded-md"
