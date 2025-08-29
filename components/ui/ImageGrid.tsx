@@ -3,7 +3,6 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { InView } from "react-intersection-observer"
 
 import { useRouter } from "next/navigation"
 import Image from "next/image";

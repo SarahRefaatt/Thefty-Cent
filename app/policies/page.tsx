@@ -59,7 +59,7 @@ export default function Policies() {
                 <div>
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">How to Return</h3>
                   <ol className="list-decimal pl-5 space-y-2 text-gray-600">
-                    <li>Log into your account and visit "Order History"</li>
+                    <li>Log into your account and visit Order History</li>
                     <li>Select the item(s) you wish to return</li>
                     <li>Print the prepaid shipping label</li>
                     <li>Pack items securely in the original packaging</li>
@@ -72,7 +72,7 @@ export default function Policies() {
                   <ul className="list-disc pl-5 space-y-1 text-gray-600">
                     <li>Underwear, swimwear, and hosiery for hygiene reasons</li>
                     <li>Personalized or custom-made items</li>
-                    <li>Items marked as "Final Sale"</li>
+                    <li>Items marked as Final Sale</li>
                     <li>Gift cards</li>
                   </ul>
                 </div>
@@ -153,7 +153,7 @@ export default function Policies() {
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">Exchange Process</h3>
                   <ol className="list-decimal pl-5 space-y-2 text-gray-600">
                     <li>Initiate a return for the item you wish to exchange</li>
-                    <li>Once processed, you'll receive store credit for the returned item</li>
+                    <li>Once processed, you will receive store credit for the returned item</li>
                     <li>Place a new order for the desired item</li>
                     <li>Use your store credit at checkout</li>
                   </ol>
@@ -163,7 +163,7 @@ export default function Policies() {
                   <h4 className="font-semibold text-blue-800 mb-2">Quick Tip</h4>
                   <p className="text-blue-700 text-sm">
                     For fastest service, place your new order immediately and use the return label to send back 
-                    the original item. This way you'll receive your exchange sooner.
+                    the original item. This way you will receive your exchange sooner.
                   </p>
                 </div>
               </div>
@@ -250,14 +250,14 @@ export default function Policies() {
             <div>
               <h3 className="font-semibold text-gray-800">What if I received a wrong item?</h3>
               <p className="text-gray-600 mt-1">
-                Contact us immediately at support@fashionstore.com with your order number and photos of the received item. We'll send the correct item and provide a return label for the wrong item.
+                Contact us immediately at support@fashionstore.com with your order number and photos of the received item. We will send the correct item and provide a return label for the wrong item.
               </p>
             </div>
             
             <div>
               <h3 className="font-semibold text-gray-800">Can I return sale items?</h3>
               <p className="text-gray-600 mt-1">
-                Yes, sale items can be returned within 30 days unless marked as "Final Sale." All regular return conditions apply.
+                Yes, sale items can be returned within 30 days unless marked as Final Sale. All regular return conditions apply.
               </p>
             </div>
           </div>
