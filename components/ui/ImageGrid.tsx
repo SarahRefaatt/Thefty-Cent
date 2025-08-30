@@ -7,156 +7,183 @@ import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
 import Image from "next/image";
 import { IconEye } from "@tabler/icons-react";
+import React, { useEffect } from "react";
+  // const products = [
+  //   { 
+  //     id: 1, 
+  //     name: "Premium Wireless Headphones", 
+  //     price: "$199.99", 
+  //     originalPrice: "$249.99",
+  //     rating: 4.8, 
+  //     reviews: 142,
+  //     image: "/assets/IMG.JPG",
+  //     category: "Electronics",
+  //     isNew: true,
+  //     discount: 20
+  //   },
+  //   { 
+  //     id: 2, 
+  //     name: "Minimalist Watch", 
+  //     price: "$129.99", 
+  //     originalPrice: "$159.99",
+  //     rating: 4.5, 
+  //     reviews: 87,
+  //     image: "/assets/IMG.JPG",
+  //     category: "Accessories",
+  //     isNew: false,
+  //     discount: 15
+  //   },
+  //   { 
+  //     id: 3, 
+  //     name: "Running Shoes", 
+  //     price: "$89.99", 
+  //     originalPrice: "$119.99",
+  //     rating: 4.7, 
+  //     reviews: 215,
+  //     image: "/assets/IMG.JPG",
+  //     category: "Footwear",
+  //     isNew: true,
+  //     discount: 25
+  //   },
+  //   { 
+  //     id: 4, 
+  //     name: "Designer Backpack", 
+  //     price: "$79.99", 
+  //     originalPrice: "$99.99",
+  //     rating: 4.6, 
+  //     reviews: 103,
+  //     image: "/assets/IMG.JPG",
+  //     category: "Accessories",
+  //     isNew: false,
+  //     discount: 20
+  //   },
+  //   { 
+  //     id: 5, 
+  //     name: "Smart Home Speaker", 
+  //     price: "$149.99", 
+  //     originalPrice: "$179.99",
+  //     rating: 4.9, 
+  //     reviews: 198,
+  //     image: "/assets/IMG.JPG",
+  //     category: "Electronics",
+  //     isNew: true,
+  //     discount: 17
+  //   },
+  //   { 
+  //     id: 6, 
+  //     name: "Sunglasses", 
+  //     price: "$59.99", 
+  //     originalPrice: "$79.99",
+  //     rating: 4.4, 
+  //     reviews: 76,
+  //     image: "/assets/IMG.JPG",
+  //     category: "Accessories",
+  //     isNew: false,
+  //     discount: 25
+  //   },
+  //   { 
+  //     id: 7, 
+  //     name: "Fitness Tracker", 
+  //     price: "$69.99", 
+  //     originalPrice: "$89.99",
+  //     rating: 4.3, 
+  //     reviews: 132,
+  //     image: "/assets/IMG.JPG",
+  //     category: "Electronics",
+  //     isNew: true,
+  //     discount: 22
+  //   },
+  //   { 
+  //     id: 8, 
+  //     name: "Casual T-Shirt", 
+  //     price: "$29.99", 
+  //     originalPrice: "$39.99",
+  //     rating: 4.2, 
+  //     reviews: 64,
+  //     image: "/assets/IMG.JPG",
+  //     category: "Clothing",
+  //     isNew: false,
+  //     discount: 25
+  //   },
+  //   { 
+  //     id: 9, 
+  //     name: "Coffee Maker", 
+  //     price: "$89.99", 
+  //     originalPrice: "$119.99",
+  //     rating: 4.6, 
+  //     reviews: 178,
+  //     image: "/assets/IMG.JPG",
+  //     category: "Home",
+  //     isNew: true,
+  //     discount: 25
+  //   },
+  //   { 
+  //     id: 10, 
+  //     name: "Desk Lamp", 
+  //     price: "$49.99", 
+  //     originalPrice: "$69.99",
+  //     rating: 4.7, 
+  //     reviews: 92,
+  //     image: "/assets/IMG.JPG",
+  //     category: "Home",
+  //     isNew: false,
+  //     discount: 29
+  //   },
+  //   { 
+  //     id: 11, 
+  //     name: "Wireless Earbuds", 
+  //     price: "$129.99", 
+  //     originalPrice: "$159.99",
+  //     rating: 4.8, 
+  //     reviews: 241,
+  //     image: "/assets/IMG.JPG",
+  //     category: "Electronics",
+  //     isNew: true,
+  //     discount: 19
+  //   },
+  //   { 
+  //     id: 12, 
+  //     name: "Leather Wallet", 
+  //     price: "$45.99", 
+  //     originalPrice: "$59.99",
+  //     rating: 4.5, 
+  //     reviews: 87,
+  //     image: "/assets/IMG.JPG",
+  //     category: "Accessories",
+  //     isNew: false,
+  //     discount: 23
+  //   }
+  // ]
 
+  interface Product {
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+    stock_quantity: number;
+    sku: string;
+    category: string;
+    brand: string;
+    weight: number;
+    dimensions: string;
+    image_url: string;
+    created_at: string;
+    updated_at: string;
+}
 export default function EcommerceProductGrid() {
     const router = useRouter();
+    const [products,setProducts] = React.useState<Product[]>([]);
+    
+    useEffect(() => {
+      fetch('api/products')
+        .then(response => response.json())
+        .then(data => setProducts(data))
+        .catch(error => console.error('Error fetching products:', error));
+    }, []);
+    
+    console.log(products);
 
-  const products = [
-    { 
-      id: 1, 
-      name: "Premium Wireless Headphones", 
-      price: "$199.99", 
-      originalPrice: "$249.99",
-      rating: 4.8, 
-      reviews: 142,
-      image: "/assets/IMG.JPG",
-      category: "Electronics",
-      isNew: true,
-      discount: 20
-    },
-    { 
-      id: 2, 
-      name: "Minimalist Watch", 
-      price: "$129.99", 
-      originalPrice: "$159.99",
-      rating: 4.5, 
-      reviews: 87,
-      image: "/assets/IMG.JPG",
-      category: "Accessories",
-      isNew: false,
-      discount: 15
-    },
-    { 
-      id: 3, 
-      name: "Running Shoes", 
-      price: "$89.99", 
-      originalPrice: "$119.99",
-      rating: 4.7, 
-      reviews: 215,
-      image: "/assets/IMG.JPG",
-      category: "Footwear",
-      isNew: true,
-      discount: 25
-    },
-    { 
-      id: 4, 
-      name: "Designer Backpack", 
-      price: "$79.99", 
-      originalPrice: "$99.99",
-      rating: 4.6, 
-      reviews: 103,
-      image: "/assets/IMG.JPG",
-      category: "Accessories",
-      isNew: false,
-      discount: 20
-    },
-    { 
-      id: 5, 
-      name: "Smart Home Speaker", 
-      price: "$149.99", 
-      originalPrice: "$179.99",
-      rating: 4.9, 
-      reviews: 198,
-      image: "/assets/IMG.JPG",
-      category: "Electronics",
-      isNew: true,
-      discount: 17
-    },
-    { 
-      id: 6, 
-      name: "Sunglasses", 
-      price: "$59.99", 
-      originalPrice: "$79.99",
-      rating: 4.4, 
-      reviews: 76,
-      image: "/assets/IMG.JPG",
-      category: "Accessories",
-      isNew: false,
-      discount: 25
-    },
-    { 
-      id: 7, 
-      name: "Fitness Tracker", 
-      price: "$69.99", 
-      originalPrice: "$89.99",
-      rating: 4.3, 
-      reviews: 132,
-      image: "/assets/IMG.JPG",
-      category: "Electronics",
-      isNew: true,
-      discount: 22
-    },
-    { 
-      id: 8, 
-      name: "Casual T-Shirt", 
-      price: "$29.99", 
-      originalPrice: "$39.99",
-      rating: 4.2, 
-      reviews: 64,
-      image: "/assets/IMG.JPG",
-      category: "Clothing",
-      isNew: false,
-      discount: 25
-    },
-    { 
-      id: 9, 
-      name: "Coffee Maker", 
-      price: "$89.99", 
-      originalPrice: "$119.99",
-      rating: 4.6, 
-      reviews: 178,
-      image: "/assets/IMG.JPG",
-      category: "Home",
-      isNew: true,
-      discount: 25
-    },
-    { 
-      id: 10, 
-      name: "Desk Lamp", 
-      price: "$49.99", 
-      originalPrice: "$69.99",
-      rating: 4.7, 
-      reviews: 92,
-      image: "/assets/IMG.JPG",
-      category: "Home",
-      isNew: false,
-      discount: 29
-    },
-    { 
-      id: 11, 
-      name: "Wireless Earbuds", 
-      price: "$129.99", 
-      originalPrice: "$159.99",
-      rating: 4.8, 
-      reviews: 241,
-      image: "/assets/IMG.JPG",
-      category: "Electronics",
-      isNew: true,
-      discount: 19
-    },
-    { 
-      id: 12, 
-      name: "Leather Wallet", 
-      price: "$45.99", 
-      originalPrice: "$59.99",
-      rating: 4.5, 
-      reviews: 87,
-      image: "/assets/IMG.JPG",
-      category: "Accessories",
-      isNew: false,
-      discount: 23
-    }
-  ]
+
   return (
 <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 sm:px-6 lg:px-8">
   <div className="max-w-7xl mx-auto">
@@ -226,7 +253,7 @@ export default function EcommerceProductGrid() {
                 <Image
                 height={160}
                 width={160}
-                  src={product.image} 
+                  src="/assets/IMG.JPG" 
                   alt={product.name}
                   className="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
@@ -252,9 +279,9 @@ export default function EcommerceProductGrid() {
                   <span className="text-xl font-bold text-gray-900 dark:text-white">
                     {product.price}
                   </span>
-                  {product.originalPrice && (
+                  {product.price && (
                     <span className="text-sm text-gray-600 dark:text-gray-400 line-through ml-2">
-                      {product.originalPrice}
+                      {product.price + 20}
                     </span>
                   )}
                 </div>

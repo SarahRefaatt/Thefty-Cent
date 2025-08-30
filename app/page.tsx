@@ -1,12 +1,16 @@
 
+"use client"
 import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar"
 
 import InViewImagesGrid from "@/components/ui/ImageGrid"
+import React, { useEffect } from "react";
+
 
 export default function Page() {
+
   return (
     <SidebarProvider
       style={
