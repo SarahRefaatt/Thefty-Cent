@@ -307,8 +307,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
-import { json } from "zod";
+
 
 interface Product {
   id: number;

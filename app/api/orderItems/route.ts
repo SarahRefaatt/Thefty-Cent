@@ -421,7 +421,13 @@ export async function GET(req: Request) {
 
   return new Response(JSON.stringify(data), { status: 200 });
 }
-
+interface orderItem {
+  order_id: number;
+  product_id: number;
+  quantity: number;
+  price: number;
+  total: number;
+}
 // POST Order Items (multiple items at once)
 export async function POST(req: Request) {
   const { order_id, items } = await req.json();
@@ -433,7 +439,7 @@ export async function POST(req: Request) {
   if (orderError || !order) return new Response(JSON.stringify({ error: "Invalid order_id" }), { status: 400 });
 
   let totalOrderAmount = order.total_amount || 0;
-  const orderItemsToInsert: any[] = [];
+  const orderItemsToInsert: orderItem[] = [];
 
   for (const item of items) {
     const { product_id, quantity } = item;
@@ -488,7 +494,7 @@ export async function PUT(req: Request) {
   if (orderError || !order) return new Response(JSON.stringify({ error: "Order not found" }), { status: 404 });
 
   let totalOrderAmount = 0;
-  const updatedItems: any[] = [];
+  const updatedItems: orderItem[] = [];
 
   for (const item of items) {
     const { product_id, quantity } = item;

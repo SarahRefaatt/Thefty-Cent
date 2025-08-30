@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/sidebar"
 
 import InViewImagesGrid from "@/components/ui/ImageGrid"
-import React, { useEffect } from "react";
+import React from "react";
 
 
 export default function Page() {

@@ -1,7 +1,6 @@
 
 import { supabase } from "@/lib/supabaseClient";
 import cookie from "cookie";
-import { cookies } from "next/headers";
 
 // GET Carts
 // export async function GET(req: Request) {
@@ -129,7 +128,6 @@ export async function POST(req: Request) {
   // Parse cookies
   const rawCookies = cookie.parse(req.headers.get("cookie") || "");
   let sessionId = rawCookies.sessionid;
-  let cart = null;
 
   // ✅ If customer_id provided → check if exists
   if (customer_id) {
