@@ -77,6 +77,7 @@ export async function GET(req: Request) {
     .from("cart_items")
     .select(`
       id,
+      cart_id,
       quantity,
       product:products (
         id,
@@ -97,26 +98,7 @@ export async function GET(req: Request) {
 }
 
 
-// PUT Update a cart
-export async function PUT(req: Request) {
-  const url = new URL(req.url);
-  const id = url.searchParams.get("id");
-  if (!id) return new Response(JSON.stringify({ error: "Cart ID is required" }), { status: 400 });
 
-  const { customer_id } = await req.json();
-
-  // Optional: validate customer exists
-  if (customer_id) {
-    const { data: customer, error } = await supabase.from("customers").select("*").eq("id", customer_id).single();
-    if (error) return new Response(JSON.stringify({ error: error.message }), { status: 500 });
-    if (!customer) return new Response(JSON.stringify({ error: "Customer not found" }), { status: 404 });
-  }
-
-  const { data, error } = await supabase.from("carts").update({ customer_id }).eq("id", id).select().single();
-  if (error) return new Response(JSON.stringify({ error: error.message }), { status: 500 });
-
-  return new Response(JSON.stringify(data), { status: 200 });
-}
 
 function generateSessionId() {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -222,4 +204,78 @@ export async function POST(req: Request) {
       }),
     },
   });
+}
+
+
+
+// // PUT Update a cart
+// export async function PUT(req: Request) {
+//   const url = new URL(req.url);
+//   const id = url.searchParams.get("id");
+//   if (!id) return new Response(JSON.stringify({ error: "Cart ID is required" }), { status: 400 });
+
+//   const { customer_id } = await req.json();
+
+//   // Optional: validate customer exists
+//   if (customer_id) {
+//     const { data: customer, error } = await supabase.from("customers").select("*").eq("id", customer_id).single();
+//     if (error) return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+//     if (!customer) return new Response(JSON.stringify({ error: "Customer not found" }), { status: 404 });
+//   }
+
+//   const { data, error } = await supabase.from("carts").update({ customer_id }).eq("id", id).select().single();
+//   if (error) return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+
+//   return new Response(JSON.stringify(data), { status: 200 });
+// }
+
+
+export async function PUT(req: Request) {
+  try {
+    const { items } = await req.json();
+
+    // ✅ Validate request body
+    if (!Array.isArray(items) || items.length === 0) {
+      return new Response(
+        JSON.stringify({ error: "Items array is required" }),
+        { status: 400 }
+      );
+    }
+
+    // Ensure each item has valid data
+    for (const item of items) {
+      if (!item.cart_item_id || typeof item.quantity !== "number" || item.quantity < 1) {
+        return new Response(
+          JSON.stringify({
+            error: "Each item must have a valid cart_item_id and quantity >= 1",
+          }),
+          { status: 400 }
+        );
+      }
+    }
+
+    // 🔄 Perform bulk update
+    const updates = items.map(({ cart_item_id, quantity }) => ({
+      id: cart_item_id,
+      quantity,
+    }));
+
+    const { data, error } = await supabase
+      .from("cart_items")
+      .upsert(updates, { onConflict: "id" }) // updates based on `id`
+      .select();
+
+    if (error) {
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 500,
+      });
+    }
+
+    return new Response(JSON.stringify({ updatedItems: data }), { status: 200 });
+  } catch (err) {
+    return new Response(
+      JSON.stringify({ error: err || "Something went wrong" }),
+      { status: 500 }
+    );
+  }
 }

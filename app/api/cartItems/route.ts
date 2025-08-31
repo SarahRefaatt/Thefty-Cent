@@ -341,3 +341,14 @@ export async function PUT(req: Request) {
 
   return new Response(JSON.stringify(data), { status: 200 });
 }
+
+
+export async function DELETE(req: Request) {
+  const url = new URL(req.url);
+  const id = url.searchParams.get("id");
+  if (!id) return new Response(JSON.stringify({ error: "ID is required" }), { status: 400 });
+
+  const { data, error } = await supabase.from("cart_items").delete().eq("id", id).select().single();
+  if (error) return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+  return new Response(JSON.stringify(data), { status: 200 });
+}
