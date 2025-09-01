@@ -233,7 +233,8 @@ import { useState, useEffect } from 'react'
 import Image from "next/image"
 import { useParams } from 'next/navigation'
 import { jsPDF } from 'jspdf'
-import autoTable from 'jspdf-autotable'
+import autoTable, { CellDef, FontStyle, RowInput, UserOptions } from "jspdf-autotable";
+
 interface Product {
   id: number;
   name: string;
@@ -262,6 +263,21 @@ shipping_address:string
   total_amount: number;
  
 }
+
+interface TableRowCell {
+  content?: string;
+  colSpan?: number;
+  styles?: {
+    fontStyle?: string;
+  };
+}
+
+type TableRow = (string | TableRowCell)[];
+  interface TablRow{
+content:string
+colSpan:number
+styles:{fontStyle:string}
+  }
 
 export default function OrderConfirmed() {
   const { id } = useParams<{ id: string }>();
@@ -294,81 +310,81 @@ console.log(id)
     }
   }, [id]);
 // Add this function to generate the PDF
-const generatePDF = (orderDetails: any) => {
-  const doc = new jsPDF()
-  
-  // Add company logo and header
-  doc.setFontSize(20)
-  doc.setTextColor(40, 40, 40)
-  doc.text('ORDER CONFIRMATION', 105, 20, { align: 'center' })
-  
-  doc.setFontSize(12)
-  doc.setTextColor(100, 100, 100)
-  doc.text(`Order ID: ${orderDetails.id}`, 105, 30, { align: 'center' })
-  doc.text(`Order Date: ${orderDetails.order_date}`, 105, 36, { align: 'center' })
-  
-  // Add order information
-  doc.setFontSize(14)
-  doc.setTextColor(40, 40, 40)
-  doc.text('Order Information', 20, 50)
-  
-  doc.setFontSize(10)
-  doc.setTextColor(80, 80, 80)
-  doc.text(`Payment Method: ${orderDetails.payment_method}`, 20, 60)
-  doc.text(`Shipping Address: ${orderDetails.shipping_address}`, 20, 66)
-  
-  // Add order items table
-  doc.setFontSize(14)
-  doc.setTextColor(40, 40, 40)
-  doc.text('Order Summary', 20, 80)
-  
-  const tableColumn = ["Product", "SKU", "Quantity", "Price"]
-  const tableRows: any[] = []
-  
-  orderDetails.order_items.forEach((item: any) => {
-    const itemData = [
+const generatePDF = (orderDetails: OrderDetails) => {
+  const doc = new jsPDF();
+
+  // Header
+  doc.setFontSize(20);
+  doc.setTextColor(40, 40, 40);
+  doc.text("ORDER CONFIRMATION", 105, 20, { align: "center" });
+
+  doc.setFontSize(12);
+  doc.setTextColor(100, 100, 100);
+  doc.text(`Order ID: ${orderDetails.id}`, 105, 30, { align: "center" });
+  doc.text(`Order Date: ${orderDetails.order_date}`, 105, 36, { align: "center" });
+
+  // Order info
+  doc.setFontSize(14);
+  doc.setTextColor(40, 40, 40);
+  doc.text("Order Information", 20, 50);
+
+  doc.setFontSize(10);
+  doc.setTextColor(80, 80, 80);
+  doc.text(`Payment Method: ${orderDetails.payment_method}`, 20, 60);
+  doc.text(`Shipping Address: ${orderDetails.shipping_address}`, 20, 66);
+
+  // Order summary
+  doc.setFontSize(14);
+  doc.setTextColor(40, 40, 40);
+  doc.text("Order Summary", 20, 80);
+
+  const tableColumn = ["Product", "SKU", "Quantity", "Price"];
+  const tableRows: TableRow[] = [];
+
+  orderDetails.order_items.forEach((item) => {
+    const itemData: TableRow = [
       item.product.name,
       item.product.sku,
-      item.quantity,
+      String(item.quantity),
       `$${(item.product.price * item.quantity).toFixed(2)}`
-    ]
-    tableRows.push(itemData)
-  })
-  
-  // Add total row
+    ];
+    tableRows.push(itemData);
+  });
+
+  // Total row
   tableRows.push([
-    { content: 'TOTAL', colSpan: 3, styles: { fontStyle: 'bold' } },
-    { content: `$${orderDetails.total_amount.toFixed(2)}`, styles: { fontStyle: 'bold' } }
-  ])
-  
+    { content: "TOTAL", colSpan: 3, styles: { fontStyle: "bold" as FontStyle } },
+    { content: `$${orderDetails.total_amount.toFixed(2)}`, styles: { fontStyle: "bold" as FontStyle } },
+  ]);
+
   autoTable(doc, {
     head: [tableColumn],
     body: tableRows,
     startY: 85,
-    theme: 'striped',
+    theme: "striped",
     headStyles: {
       fillColor: [79, 70, 229],
       textColor: 255,
-      fontStyle: 'bold'
+      fontStyle: "bold" as FontStyle,
     },
     alternateRowStyles: {
-      fillColor: [245, 245, 245]
-    }
-  })
-  
-  // Add footer
-  const pageCount = doc.getNumberOfPages()
-  for (let i = 1; i <= pageCount; i++) {
-    doc.setPage(i)
-    doc.setFontSize(10)
-    doc.setTextColor(100, 100, 100)
-    doc.text('Thank you for your purchase!', 105, doc.internal.pageSize.height - 10, { align: 'center' })
-  }
-  
-  // Save the PDF
-  doc.save(`order-${orderDetails.id}.pdf`)
-}
+      fillColor: [245, 245, 245],
+    },
+  } as UserOptions);
 
+  // Footer
+  const pageCount = doc.getNumberOfPages();
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.text("Thank you for your purchase!", 105, doc.internal.pageSize.height - 10, {
+      align: "center",
+    });
+  }
+
+  doc.save(`order-${orderDetails.id}.pdf`);
+};
 if (loading) {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
