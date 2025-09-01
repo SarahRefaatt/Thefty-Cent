@@ -232,7 +232,8 @@
 import { useState, useEffect } from 'react'
 import Image from "next/image"
 import { useParams } from 'next/navigation'
-
+import { jsPDF } from 'jspdf'
+import autoTable from 'jspdf-autotable'
 interface Product {
   id: number;
   name: string;
@@ -292,213 +293,284 @@ console.log(id)
       fetchOrderDetails();
     }
   }, [id]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white rounded-lg shadow-md p-8 max-w-md w-full mx-4">
-          <div className="flex flex-col items-center">
-            <div className="w-16 h-16 border-4 border-gray-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-            <h2 className="text-xl font-semibold text-gray-800">Loading Order Details</h2>
-            <p className="text-gray-600 mt-2">Please wait while we fetch your order information.</p>
-          </div>
-        </div>
-      </div>
-    );
+// Add this function to generate the PDF
+const generatePDF = (orderDetails: any) => {
+  const doc = new jsPDF()
+  
+  // Add company logo and header
+  doc.setFontSize(20)
+  doc.setTextColor(40, 40, 40)
+  doc.text('ORDER CONFIRMATION', 105, 20, { align: 'center' })
+  
+  doc.setFontSize(12)
+  doc.setTextColor(100, 100, 100)
+  doc.text(`Order ID: ${orderDetails.id}`, 105, 30, { align: 'center' })
+  doc.text(`Order Date: ${orderDetails.order_date}`, 105, 36, { align: 'center' })
+  
+  // Add order information
+  doc.setFontSize(14)
+  doc.setTextColor(40, 40, 40)
+  doc.text('Order Information', 20, 50)
+  
+  doc.setFontSize(10)
+  doc.setTextColor(80, 80, 80)
+  doc.text(`Payment Method: ${orderDetails.payment_method}`, 20, 60)
+  doc.text(`Shipping Address: ${orderDetails.shipping_address}`, 20, 66)
+  
+  // Add order items table
+  doc.setFontSize(14)
+  doc.setTextColor(40, 40, 40)
+  doc.text('Order Summary', 20, 80)
+  
+  const tableColumn = ["Product", "SKU", "Quantity", "Price"]
+  const tableRows: any[] = []
+  
+  orderDetails.order_items.forEach((item: any) => {
+    const itemData = [
+      item.product.name,
+      item.product.sku,
+      item.quantity,
+      `$${(item.product.price * item.quantity).toFixed(2)}`
+    ]
+    tableRows.push(itemData)
+  })
+  
+  // Add total row
+  tableRows.push([
+    { content: 'TOTAL', colSpan: 3, styles: { fontStyle: 'bold' } },
+    { content: `$${orderDetails.total_amount.toFixed(2)}`, styles: { fontStyle: 'bold' } }
+  ])
+  
+  autoTable(doc, {
+    head: [tableColumn],
+    body: tableRows,
+    startY: 85,
+    theme: 'striped',
+    headStyles: {
+      fillColor: [79, 70, 229],
+      textColor: 255,
+      fontStyle: 'bold'
+    },
+    alternateRowStyles: {
+      fillColor: [245, 245, 245]
+    }
+  })
+  
+  // Add footer
+  const pageCount = doc.getNumberOfPages()
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i)
+    doc.setFontSize(10)
+    doc.setTextColor(100, 100, 100)
+    doc.text('Thank you for your purchase!', 105, doc.internal.pageSize.height - 10, { align: 'center' })
   }
+  
+  // Save the PDF
+  doc.save(`order-${orderDetails.id}.pdf`)
+}
 
-  if (error || !orderDetails) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white rounded-lg shadow-md p-8 max-w-md w-full mx-4">
-          <div className="flex flex-col items-center text-center">
-            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">Unable to Load Order</h2>
-            <p className="text-gray-600 mb-4">{error || 'Order not found'}</p>
-            <button 
-              className="bg-gray-600 text-white px-6 py-2 rounded-md hover:bg-gray-700 transition-colors"
-              onClick={() => window.location.href = '/'}
-            >
-              Return to Home
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
+if (loading) {
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4 max-w-4xl">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          {/* Header */}
-          <div className="bg-gradient-to-r from-red-800 to-gray-900  text-white p-6">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-              <div>
-                <h1 className="text-2xl font-bold mb-2">Order Confirmed</h1>
-                <p className="opacity-90">Thank you for your purchase. Your order has been successfully placed.</p>
-              </div>
-              <div className="mt-4 md:mt-0 bg-white bg-opacity-20 rounded-lg px-4 py-2">
-                <span className="text-sm opacity-90 text-black">Order ID: </span>
-                <span className="font-semibold text-black">{orderDetails.id}</span>
-              </div>
-            </div>
-          </div>
-          
-          {/* Success Icon */}
-          <div className="flex justify-center -mt-8 mb-6">
-            <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-          </div>
-          
-          {/* Order Details */}     
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-              <div>
-                <h2 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Order Information</h2>
-                
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Order Date</span>
-                    <span className="font-medium">{orderDetails.order_date}</span>
-                  </div>
-                  
-                  {/* <div className="flex justify-between">
-                    <span className="text-gray-600">Estimated Delivery</span>
-                  </div> */}
-                  
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Payment Method</span>
-                    <span className="font-medium">{orderDetails.payment_method}</span>
-                  </div>
-                  
-                  <div className="flex justify-between items-start">
-                    <span className="text-gray-600">Shipping Address</span>
-                    <span className="font-medium text-right">
-                      {orderDetails.shipping_address}<br />
-                     
-                    </span>
-                  </div>
-                </div>
-              </div>
-              
-              <div>
-                <h2 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Order Summary</h2>
-                
-                <div className="space-y-4 mb-6">
-                  {orderDetails.order_items.map(item => (
-                    <div key={item.id} className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
-                      <div className="relative w-16 h-16 overflow-hidden rounded-md">
-                        <Image
-                          src={ "/assets/IMG.jpg"} 
-                          alt={item.product.name}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                      
-                      <div className="flex-grow">
-                        <h3 className="text-sm font-medium text-gray-900">{item.product.name}</h3>
-                        <p className="text-xs text-gray-500">SKU: {item.product.sku}</p>
-                        <p className="text-sm text-gray-500 mt-1">Qty: {item.quantity}</p>
-                      </div>
-                      
-                      <div className="text-sm font-bold text-gray-900">
-                        ${(item.product.price * item.quantity).toFixed(2)}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                
-                <div className="border-t border-gray-200 pt-4 space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Subtotal</span>
-                    <span className="font-medium">${orderDetails.total_amount.toFixed(2)}</span>
-                  </div>
-                  
- 
-                  
-                  <div className="flex justify-between text-lg font-bold pt-2 border-t border-gray-200">
-                    <span>Total</span>
-                    <span>${orderDetails.total_amount.toFixed(2)}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Next Steps */}
-            <div className="bg-gray-50 rounded-lg p-6 mb-8 border border-gray-100">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">What Happens Next?</h2>
-              
-              <div className="space-y-4">
-                <div className="flex items-start">
-                  <div className="bg-gray-100 rounded-full p-2 mr-4 flex-shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-gray-800">Order Processing</h3>
-                    <p className="text-sm text-gray-600">We are preparing your order for shipment. This usually takes 1-2 business days.</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="bg-gray-100 rounded-full p-2 mr-4 flex-shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-gray-800">Shipping Confirmation</h3>
-                    <p className="text-sm text-gray-600">You will receive a shipping confirmation email with tracking information once your order ships.</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="bg-gray-100 rounded-full p-2 mr-4 flex-shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-gray-800">Delivery</h3>
-                    <p className="text-sm text-gray-600">Your order will be delivered by . Someone must be available to receive the package.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4 border-t border-gray-200">
-              <button 
-                className="bg-gray-600 text-white px-6 py-3 rounded-md hover:bg-gray-700 transition-colors font-medium"
-                onClick={() => window.location.href = '/'}
-              >
-                Continue Shopping
-              </button>
-              <button 
-                className="border border-gray-300 text-gray-700 px-6 py-3 rounded-md hover:bg-gray-50 transition-colors font-medium"
-                onClick={() => window.print()}
-              >
-                Print Receipt
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        {/* Support Information */}
-        <div className="mt-8 text-center text-sm text-gray-600">
-          <p>Need help? Contact our customer support at <a href="mailto:support@example.com" className="text-gray-600 hover:underline">support@example.com</a> or call 1-800-123-4567</p>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 max-w-md w-full mx-4">
+        <div className="flex flex-col items-center">
+          <div className="w-16 h-16 border-4 border-gray-500 dark:border-gray-400 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Loading Order Details</h2>
+          <p className="text-gray-600 dark:text-gray-300 mt-2">Please wait while we fetch your order information.</p>
         </div>
       </div>
     </div>
   );
+}
+
+if (error || !orderDetails) {
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 max-w-md w-full mx-4">
+        <div className="flex flex-col items-center text-center">
+          <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </div>
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">Unable to Load Order</h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">{error || 'Order not found'}</p>
+          <button 
+            className="bg-gray-600 dark:bg-gray-700 text-white px-6 py-2 rounded-md hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors"
+            onClick={() => window.location.href = '/'}
+          >
+            Return to Home
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+return (
+  <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+    <div className="container mx-auto px-4 max-w-4xl">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-red-800 to-gray-900 dark:from-red-900 dark:to-gray-950 text-white p-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+            <div>
+              <h1 className="text-2xl font-bold mb-2">Order Confirmed</h1>
+              <p className="opacity-90">Thank you for your purchase. Your order has been successfully placed.</p>
+            </div>
+            <div className="mt-4 md:mt-0 bg-white bg-opacity-20 dark:bg-gray-800 dark:bg-opacity-30 rounded-lg px-4 py-2">
+              <span className="text-sm opacity-90 text-black dark:text-white">Order ID: </span>
+              <span className="font-semibold text-black dark:text-white">{orderDetails.id}</span>
+            </div>
+          </div>
+        </div>
+        
+        {/* Success Icon */}
+        <div className="flex justify-center -mt-8 mb-6">
+          <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+        </div>
+        
+        {/* Order Details */}     
+        <div className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <div>
+              <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">Order Information</h2>
+              
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-gray-600 dark:text-gray-300">Order Date</span>
+                  <span className="font-medium text-gray-900 dark:text-white">{orderDetails.order_date}</span>
+                </div>
+                
+                <div className="flex justify-between">
+                  <span className="text-gray-600 dark:text-gray-300">Payment Method</span>
+                  <span className="font-medium text-gray-900 dark:text-white">{orderDetails.payment_method}</span>
+                </div>
+                
+                <div className="flex justify-between items-start">
+                  <span className="text-gray-600 dark:text-gray-300">Shipping Address</span>
+                  <span className="font-medium text-right text-gray-900 dark:text-white">
+                    {orderDetails.shipping_address}<br />
+                  </span>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">Order Summary</h2>
+              
+              <div className="space-y-4 mb-6">
+                {orderDetails.order_items.map(item => (
+                  <div key={item.id} className="flex items-center gap-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div className="relative w-16 h-16 overflow-hidden rounded-md">
+                      <Image
+                        src={"/assets/IMG.jpg"} 
+                        alt={item.product.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    
+                    <div className="flex-grow">
+                      <h3 className="text-sm font-medium text-gray-900 dark:text-white">{item.product.name}</h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">SKU: {item.product.sku}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Qty: {item.quantity}</p>
+                    </div>
+                    
+                    <div className="text-sm font-bold text-gray-900 dark:text-white">
+                      ${(item.product.price * item.quantity).toFixed(2)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-4 space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600 dark:text-gray-300">Subtotal</span>
+                  <span className="font-medium text-gray-900 dark:text-white">${orderDetails.total_amount.toFixed(2)}</span>
+                </div>
+                
+                <div className="flex justify-between text-lg font-bold pt-2 border-t border-gray-200 dark:border-gray-700">
+                  <span className="text-gray-900 dark:text-white">Total</span>
+                  <span className="text-gray-900 dark:text-white">${orderDetails.total_amount.toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Next Steps */}
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 mb-8 border border-gray-100 dark:border-gray-600">
+            <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">What Happens Next?</h2>
+            
+            <div className="space-y-4">
+              <div className="flex items-start">
+                <div className="bg-gray-100 dark:bg-gray-600 rounded-full p-2 mr-4 flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-800 dark:text-white">Order Processing</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">We are preparing your order for shipment. This usually takes 1-2 business days.</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start">
+                <div className="bg-gray-100 dark:bg-gray-600 rounded-full p-2 mr-4 flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-800 dark:text-white">Shipping Confirmation</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">You will receive a shipping confirmation email with tracking information once your order ships.</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start">
+                <div className="bg-gray-100 dark:bg-gray-600 rounded-full p-2 mr-4 flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-800 dark:text-white">Delivery</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">Your order will be delivered soon. Someone must be available to receive the package.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4 border-t border-gray-200 dark:border-gray-700">
+            <button 
+              className="bg-gray-600 dark:bg-gray-700 text-white px-6 py-3 rounded-md hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors font-medium"
+              onClick={() => window.location.href = '/'}
+            >
+              Continue Shopping
+            </button>
+<button 
+  className="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium flex items-center justify-center gap-2"
+  onClick={() => generatePDF(orderDetails)}
+>
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+  </svg>
+  Download Receipt (PDF)
+</button>
+          </div>
+        </div>
+      </div>
+      
+      {/* Support Information */}
+      <div className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
+        <p>Need help? Contact our customer support at <a href="mailto:support@example.com" className="text-blue-600 dark:text-blue-400 hover:underline">support@example.com</a> or call 1-800-123-4567</p>
+      </div>
+    </div>
+  </div>
+);
 }

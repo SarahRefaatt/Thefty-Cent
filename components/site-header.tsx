@@ -152,7 +152,7 @@ export function SiteHeader() {
     };
     fetchCart();
 
-    // ✅ Listen for cart updates (like a global event bus)
+    // ✅ Listen for cart updates
     const handleCartUpdate = (e: CustomEvent<CartItem[]>) => {
       setCartItems(e.detail);
     };
@@ -166,8 +166,21 @@ export function SiteHeader() {
   const cartItemsCount = cartItems.length;
   const hasItems = cartItemsCount > 0;
 
+  // ✅ Handle click: go to cart + reset cart
+  const handleCartClick = async () => {
+    router.push("/cart");
+    setCartItems([]); // clears count locally
+
+    // Optionally, tell backend to clear cart
+    try {
+      await fetch("/api/carts/clear", { method: "POST" });
+    } catch (error) {
+      console.error("Error clearing cart:", error);
+    }
+  };
+
   return (
- <header className="sticky top-0 z-50 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 shadow-sm h-16 transition-colors duration-300">
+    <header className="sticky top-0 z-50 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 shadow-sm h-16 transition-colors duration-300">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6 h-full">
         {/* Logo */}
         <div className="flex items-center ml-2 lg:ml-0">
@@ -176,21 +189,19 @@ export function SiteHeader() {
           </h1>
         </div>
 
-
         {/* Right side icons */}
         <div className="ml-auto flex items-center gap-4">
           {/* Cart Button (only show if items exist) */}
           {hasItems && (
             <motion.button
-              className="relative p-2 rounded-md transition hover:bg-gray-100 dark:hover:bg-gray-800"
-              onClick={() => router.push("/cart")}
-              animate={{
-                scale: [1, 1.2, 1],
-                rotate: [0, 5, -5, 0],
-              }}
+              className={`relative p-2 rounded-md transition 
+                ${theme === "dark" ? "bg-black" : "bg-transparent"} 
+                hover:bg-gray-100 dark:hover:bg-gray-800`}
+              onClick={handleCartClick}
+              animate={{ scale: [1, 1.2, 1], rotate: [0, 5, -5, 0] }}
               transition={{ duration: 1, repeat: Infinity }}
             >
-              {/* ✅ Swap the logo dynamically */}
+              {/* ✅ Dynamic Icon */}
               <Image
                 src={theme === "dark" ? "/assets/thief_white.png" : "/assets/thief.png"}
                 alt="Cart"
@@ -198,6 +209,7 @@ export function SiteHeader() {
                 height={20}
               />
 
+              {/* ✅ Cart Count */}
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-3 w-3 flex items-center justify-center">
                 {cartItemsCount}
               </span>

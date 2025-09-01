@@ -579,7 +579,7 @@ setAddingToCart(null)
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-300 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
                   <button
-                    onClick={() => router.push(`/products/${product.id}`)}
+                    onClick={() => router.push(`/${product.id}`)}
                     className="bg-white dark:bg-black text-gray-900 dark:text-white p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300"
                     aria-label="View product details"
                   >
@@ -617,7 +617,7 @@ setAddingToCart(null)
                   <button 
                     onClick={() => handleAddToCart(product.id)}
                     disabled={addingToCart === product.id || product.stock_quantity === 0}
-                    className="flex-1 bg-gray-900 dark:bg-black text-white py-2 px-4 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-800 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 bg-gray-900 dark:bg-gray-900 text-white py-2 px-4 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-800 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {addingToCart === product.id ? (
                       <>
@@ -633,7 +633,7 @@ setAddingToCart(null)
                   </button>
 
                   <button
-                    onClick={() => router.push(`/products/${product.id}`)}
+                    onClick={() => router.push(`/${product.id}`)}
                     className="bg-white dark:bg-black border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
                     aria-label="View product details"
                   >
