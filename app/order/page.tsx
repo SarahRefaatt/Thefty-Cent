@@ -667,7 +667,8 @@ export default function OrderConfirmation() {
 
       setOrderPlaced(true);
       // router.push(`/confirmed_order/${data.order_id}`);
-      router.push(`/confirmed_order`);
+      console.log("juju : ",data.order.order_id)
+      router.push(`/confirmed_order/${data.order.order_id}`);
 
     } catch (error) {
       console.error("Error submitting order:", error);

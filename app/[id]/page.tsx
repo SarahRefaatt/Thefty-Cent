@@ -401,6 +401,9 @@ const handleAddToCart = async () => {
     console.log("Cart Item:", cartItemData);
 
     showNotification(`${quantity} ${product.name} added to cart!`);
+          setTimeout(() => {
+        window.location.reload();
+      }, 2200);
   } catch (error) {
     console.error("Error adding to cart:", error);
     showNotification("Failed to add product to cart");

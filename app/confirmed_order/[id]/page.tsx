@@ -169,13 +169,13 @@
 //           </div>
           
 //           {/* Next Steps */}
-//           <div className="bg-blue-50 rounded-lg p-6 mb-8">
+//           <div className="bg-gray-50 rounded-lg p-6 mb-8">
 //             <h2 className="text-xl font-semibold text-gray-800 mb-4">What is Next?</h2>
             
 //             <div className="space-y-4">
 //               <div className="flex items-start">
-//                 <div className="bg-blue-100 rounded-full p-2 mr-4">
-//                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+//                 <div className="bg-gray-100 rounded-full p-2 mr-4">
+//                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 //                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
 //                   </svg>
 //                 </div>
@@ -186,8 +186,8 @@
 //               </div>
               
 //               <div className="flex items-start">
-//                 <div className="bg-blue-100 rounded-full p-2 mr-4">
-//                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+//                 <div className="bg-gray-100 rounded-full p-2 mr-4">
+//                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 //                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
 //                   </svg>
 //                 </div>
@@ -198,8 +198,8 @@
 //               </div>
               
 //               <div className="flex items-start">
-//                 <div className="bg-blue-100 rounded-full p-2 mr-4">
-//                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+//                 <div className="bg-gray-100 rounded-full p-2 mr-4">
+//                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 //                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
 //                   </svg>
 //                 </div>
@@ -267,12 +267,12 @@ export default function OrderConfirmed() {
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
-
+console.log(id)
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/orders/${id}`);
+        const res = await fetch(`/api/orders?id=${id}`);
         
         if (!res.ok) {
           throw new Error('Failed to fetch order details');
@@ -298,7 +298,7 @@ export default function OrderConfirmed() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="bg-white rounded-lg shadow-md p-8 max-w-md w-full mx-4">
           <div className="flex flex-col items-center">
-            <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+            <div className="w-16 h-16 border-4 border-gray-500 border-t-transparent rounded-full animate-spin mb-4"></div>
             <h2 className="text-xl font-semibold text-gray-800">Loading Order Details</h2>
             <p className="text-gray-600 mt-2">Please wait while we fetch your order information.</p>
           </div>
@@ -320,7 +320,7 @@ export default function OrderConfirmed() {
             <h2 className="text-xl font-semibold text-gray-800 mb-2">Unable to Load Order</h2>
             <p className="text-gray-600 mb-4">{error || 'Order not found'}</p>
             <button 
-              className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
+              className="bg-gray-600 text-white px-6 py-2 rounded-md hover:bg-gray-700 transition-colors"
               onClick={() => window.location.href = '/'}
             >
               Return to Home
@@ -336,15 +336,15 @@ export default function OrderConfirmed() {
       <div className="container mx-auto px-4 max-w-4xl">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6">
+          <div className="bg-gradient-to-r from-red-800 to-gray-900  text-white p-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between">
               <div>
                 <h1 className="text-2xl font-bold mb-2">Order Confirmed</h1>
                 <p className="opacity-90">Thank you for your purchase. Your order has been successfully placed.</p>
               </div>
               <div className="mt-4 md:mt-0 bg-white bg-opacity-20 rounded-lg px-4 py-2">
-                <span className="text-sm opacity-90">Order ID: </span>
-                <span className="font-semibold">{orderDetails.id}</span>
+                <span className="text-sm opacity-90 text-black">Order ID: </span>
+                <span className="font-semibold text-black">{orderDetails.id}</span>
               </div>
             </div>
           </div>
@@ -358,7 +358,7 @@ export default function OrderConfirmed() {
             </div>
           </div>
           
-          {/* Order Details */}
+          {/* Order Details */}     
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
               <div>
@@ -370,10 +370,9 @@ export default function OrderConfirmed() {
                     <span className="font-medium">{orderDetails.order_date}</span>
                   </div>
                   
-                  <div className="flex justify-between">
+                  {/* <div className="flex justify-between">
                     <span className="text-gray-600">Estimated Delivery</span>
-                    {/* <span className="font-medium">{orderDetails.delivery_date}</span> */}
-                  </div>
+                  </div> */}
                   
                   <div className="flex justify-between">
                     <span className="text-gray-600">Payment Method</span>
@@ -398,7 +397,7 @@ export default function OrderConfirmed() {
                     <div key={item.id} className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
                       <div className="relative w-16 h-16 overflow-hidden rounded-md">
                         <Image
-                          src={item.product.image || "/assets/placeholder.jpg"} 
+                          src={ "/assets/IMG.jpg"} 
                           alt={item.product.name}
                           fill
                           className="object-cover"
@@ -435,13 +434,13 @@ export default function OrderConfirmed() {
             </div>
             
             {/* Next Steps */}
-            <div className="bg-blue-50 rounded-lg p-6 mb-8 border border-blue-100">
+            <div className="bg-gray-50 rounded-lg p-6 mb-8 border border-gray-100">
               <h2 className="text-xl font-semibold text-gray-800 mb-4">What Happens Next?</h2>
               
               <div className="space-y-4">
                 <div className="flex items-start">
-                  <div className="bg-blue-100 rounded-full p-2 mr-4 flex-shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="bg-gray-100 rounded-full p-2 mr-4 flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
@@ -452,8 +451,8 @@ export default function OrderConfirmed() {
                 </div>
                 
                 <div className="flex items-start">
-                  <div className="bg-blue-100 rounded-full p-2 mr-4 flex-shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="bg-gray-100 rounded-full p-2 mr-4 flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
                   </div>
@@ -464,8 +463,8 @@ export default function OrderConfirmed() {
                 </div>
                 
                 <div className="flex items-start">
-                  <div className="bg-blue-100 rounded-full p-2 mr-4 flex-shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="bg-gray-100 rounded-full p-2 mr-4 flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
                   </div>
@@ -480,7 +479,7 @@ export default function OrderConfirmed() {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4 border-t border-gray-200">
               <button 
-                className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors font-medium"
+                className="bg-gray-600 text-white px-6 py-3 rounded-md hover:bg-gray-700 transition-colors font-medium"
                 onClick={() => window.location.href = '/'}
               >
                 Continue Shopping
@@ -497,7 +496,7 @@ export default function OrderConfirmed() {
         
         {/* Support Information */}
         <div className="mt-8 text-center text-sm text-gray-600">
-          <p>Need help? Contact our customer support at <a href="mailto:support@example.com" className="text-blue-600 hover:underline">support@example.com</a> or call 1-800-123-4567</p>
+          <p>Need help? Contact our customer support at <a href="mailto:support@example.com" className="text-gray-600 hover:underline">support@example.com</a> or call 1-800-123-4567</p>
         </div>
       </div>
     </div>
