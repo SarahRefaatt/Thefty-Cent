@@ -680,7 +680,7 @@ export default function OrderConfirmation() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gray-50 py-12 dark:bg-black">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="bg-white rounded-lg shadow-md p-8 text-center">
             <div className="flex justify-center items-center">
@@ -695,7 +695,7 @@ export default function OrderConfirmation() {
 
 if (cartItems.length === 0 && !loading) {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-black py-12">
       <div className="container mx-auto px-4 max-w-6xl">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Checkout</h1>
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 text-center">

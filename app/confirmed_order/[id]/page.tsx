@@ -584,7 +584,7 @@ return (
       
       {/* Support Information */}
       <div className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
-        <p>Need help? Contact our customer support at <a href="mailto:support@example.com" className="text-blue-600 dark:text-blue-400 hover:underline">support@example.com</a> or call 1-800-123-4567</p>
+        <p>Need help? Contact our customer support at <a href="mailto:support@example.com" className="text-gray-600 dark:text-gray-400 hover:underline">support@example.com</a> or call 1-800-123-4567</p>
       </div>
     </div>
   </div>

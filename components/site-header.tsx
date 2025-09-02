@@ -118,13 +118,11 @@
 //         </div>
 //       )} */}
 
-
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { useTheme } from "next-themes"; // ✅ To detect dark mode
 
 interface CartItem {
   id: number;
@@ -134,8 +132,56 @@ interface CartItem {
 
 export function SiteHeader() {
   const router = useRouter();
-  const { theme } = useTheme(); // ✅ Get current theme
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [mounted, setMounted] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Detect theme/dark mode without useTheme()
+  useEffect(() => {
+    setMounted(true);
+    
+    // Check if dark mode is enabled
+    const checkDarkMode = () => {
+      // Method 1: Check document class
+      if (document.documentElement.classList.contains('dark')) {
+        setIsDarkMode(true);
+        return;
+      }
+      
+      // Method 2: Check system preference
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        setIsDarkMode(true);
+        return;
+      }
+      
+      // Method 3: Check localStorage
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        setIsDarkMode(true);
+        return;
+      }
+      
+      setIsDarkMode(false);
+    };
+    
+    checkDarkMode();
+    
+    // Listen for theme changes
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', checkDarkMode);
+    
+    // Watch for class changes on html element
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.documentElement, { 
+      attributes: true, 
+      attributeFilter: ['class'] 
+    });
+    
+    return () => {
+      mediaQuery.removeEventListener('change', checkDarkMode);
+      observer.disconnect();
+    };
+  }, []);
 
   // ✅ Fetch cart items initially
   useEffect(() => {
@@ -163,7 +209,7 @@ export function SiteHeader() {
     };
   }, []);
 
-  const cartItemsCount = cartItems.length;
+  const cartItemsCount = cartItems.reduce((total, item) => total + item.quantity, 0);
   const hasItems = cartItemsCount > 0;
 
   // ✅ Handle click: go to cart + reset cart
@@ -178,6 +224,9 @@ export function SiteHeader() {
       console.error("Error clearing cart:", error);
     }
   };
+
+  if (!mounted) return null;
+  console.log(isDarkMode)
 
   return (
     <header className="sticky top-0 z-50 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 shadow-sm h-16 transition-colors duration-300">
@@ -195,22 +244,21 @@ export function SiteHeader() {
           {hasItems && (
             <motion.button
               className={`relative p-2 rounded-md transition 
-                ${theme === "dark" ? "bg-black" : "bg-transparent"} 
+                ${isDarkMode ? "bg-black" : "bg-transparent"} 
                 hover:bg-gray-100 dark:hover:bg-gray-800`}
               onClick={handleCartClick}
               animate={{ scale: [1, 1.2, 1], rotate: [0, 5, -5, 0] }}
               transition={{ duration: 1, repeat: Infinity }}
             >
-              {/* ✅ Dynamic Icon */}
+              {/* ✅ Dynamic Icon - Always use white in dark header */}
               <Image
-                src={theme === "dark" ? "/assets/thief_white.png" : "/assets/thief.png"}
-                alt="Cart"
+src={isDarkMode ? "/assets/thief_white.png" : "/assets/thief.png"}                alt="Cart"
                 width={20}
                 height={20}
               />
 
               {/* ✅ Cart Count */}
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-3 w-3 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                 {cartItemsCount}
               </span>
             </motion.button>
