@@ -137,7 +137,8 @@ fetchData()
   const numOrders=orders
   console.log(orders)
 
-
+ const numProducts=products
+  console.log(orders)
   if(!isAdmin){
     return (
     <div className="p-6">
@@ -171,7 +172,7 @@ fetchData()
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Products</p>
-                <p className="text-2xl font-bold text-gray-900">{products}</p>
+                <p className="text-2xl font-bold text-gray-900">{numProducts}</p>
               </div>
             </div>
           </div>
