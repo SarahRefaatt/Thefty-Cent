@@ -234,6 +234,7 @@ import Image from "next/image"
 import { useParams } from 'next/navigation'
 import { jsPDF } from 'jspdf'
 import autoTable, { CellDef, FontStyle, RowInput, UserOptions } from "jspdf-autotable";
+import { useCartStore } from "@/app/store/cartStore";
 
 interface Product {
   id: number;
@@ -284,6 +285,11 @@ export default function OrderConfirmed() {
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
+    const { fetchCart, setCartItems: setCartStoreItems } = useCartStore.getState();
+  useEffect(() => {
+  setCartStoreItems([]); // Sync Zustand after local updates
+}, [[], setCartStoreItems]);
+
 console.log(id)
   useEffect(() => {
     const fetchOrderDetails = async () => {
