@@ -313,8 +313,6 @@
 //   )
 // }
 
-
-
 "use client";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -326,8 +324,8 @@ export default function Dashboard() {
 
   // 🔹 States
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [products, setProducts] = useState<number>(0);
-  const [orders, setOrders] = useState<number>(0);
+  const [productsCount, setProductsCount] = useState<number>(0);
+  const [ordersCount, setOrdersCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
   // 🔹 Check Admin Status
@@ -353,7 +351,7 @@ export default function Dashboard() {
         const res = await fetch("/api/products");
         if (!res.ok) throw new Error("Failed to fetch products");
         const data = await res.json();
-        setProducts(Array.isArray(data) ? data.length : 0);
+        setProductsCount(Array.isArray(data) ? data.length : 0); // ✅ Store count
       } catch (err) {
         console.error(err);
       } finally {
@@ -370,7 +368,7 @@ export default function Dashboard() {
         const res = await fetch("/api/orders?status=pending");
         if (!res.ok) throw new Error("Failed to fetch orders");
         const data = await res.json();
-        setOrders(Array.isArray(data) ? data.length : 0);
+        setOrdersCount(Array.isArray(data) ? data.length : 0); // ✅ Store count
       } catch (err) {
         console.error(err);
       }
@@ -416,7 +414,7 @@ export default function Dashboard() {
             </div>
             <div>
               <p className="text-sm font-medium text-gray-600">Total Products</p>
-              <p className="text-2xl font-bold text-gray-900">{products}</p>
+              <p className="text-2xl font-bold text-gray-900">{productsCount}</p>
             </div>
           </div>
 
@@ -426,12 +424,12 @@ export default function Dashboard() {
             </div>
             <div>
               <p className="text-sm font-medium text-gray-600">Pending Orders</p>
-              <p className="text-2xl font-bold text-gray-900">{orders}</p>
+              <p className="text-2xl font-bold text-gray-900">{ordersCount}</p>
             </div>
           </div>
         </div>
 
-        {/* Buttons */}
+        {/* Quick Actions */}
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-white rounded-lg shadow p-4 flex items-center justify-between">

@@ -208,7 +208,7 @@ export function SiteHeader() {
   };
 
     const handleAdminClick = () => {
-    router.push("/dashboard/dashboardClient");
+    router.push("/dashboard");
   };
 
   if (!mounted) return null;
