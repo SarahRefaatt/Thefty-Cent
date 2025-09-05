@@ -318,6 +318,9 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { Package, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
+// import { useRouter } from 'next/navigation'
+
+
 
 export default function Dashboard() {
   const router = useRouter();
@@ -375,7 +378,27 @@ export default function Dashboard() {
     }
     fetchOrders();
   }, []);
-
+  const adminCards = [
+    {
+      title: "Product Management",
+      description: "Create, edit, and manage your product catalog",
+      icon: <Package className="h-8 w-8" />,
+      action: () => router.push('/admin_products'),
+      buttonText: "Manage Products",
+      stats: "128 products",
+      color: "bg-blue-500"
+    },
+    {
+      title: "Order Management",
+      description: "View and process customer orders",
+      icon: <ShoppingCart className="h-8 w-8" />,
+      action: () => router.push('/admin_orders'),
+      buttonText: "View Orders",
+      stats: "24 pending orders",
+      color: "bg-green-500"
+    },
+   
+  ];
   // 🔹 Show Loading
   if (loading || isAdmin === null) {
     return (
@@ -427,6 +450,32 @@ export default function Dashboard() {
               <p className="text-2xl font-bold text-gray-900">{ordersCount}</p>
             </div>
           </div>
+        </div>
+
+               <h2 className="text-xl font-semibold text-gray-900 mb-4">Management Sections</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {adminCards.map((card, index) => (
+            <div key={index} className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-200 hover:shadow-lg">
+              <div className="p-6">
+                <div className="flex items-start justify-between">
+                  <div className={`rounded-lg p-3 ${card.color} text-white`}>
+                    {card.icon}
+                  </div>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mt-4">{card.title}</h3>
+                <p className="text-gray-600 mt-2">{card.description}</p>
+                <p className="text-sm text-gray-500 mt-4">{card.stats}</p>
+                <div className="mt-6">
+                  <Button 
+                    onClick={card.action} 
+                    className="w-full"
+                  >
+                    {card.buttonText}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Quick Actions */}
