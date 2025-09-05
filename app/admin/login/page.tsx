@@ -19,7 +19,7 @@ export default function AdminLogin() {
     });
 
     if (res.ok) {
-      router.push("/dashboard/dashboardClient"); // Redirect to admin dashboard
+      router.push("/dashboard"); // Redirect to admin dashboard
     } else {
       const data = await res.json();
       setError(data.message);
