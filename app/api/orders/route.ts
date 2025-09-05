@@ -10,6 +10,7 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const id = url.searchParams.get("id");
   const customer_email = url.searchParams.get("customer_email");
+  const status=url.searchParams.get("status")
 
   // ✅ Get order by ID with items
   if (id && !isNaN(Number(id))) {
@@ -51,6 +52,20 @@ export async function GET(req: Request) {
     if (error) return new Response(JSON.stringify({ error: error.message }), { status: 500 });
     return new Response(JSON.stringify(data), { status: 200 });
   }
+
+if (status) {
+  const { count, error } = await supabase
+    .from("orders")
+    .select("*", { count: "exact", head: true })
+    .eq("status", status);
+
+  if (error) {
+    console.error("Error fetching count:", error);
+  } else {
+    console.log("Order count:", count);
+  }
+}
+
 
   // ✅ Get all orders
   const { data, error } = await supabase

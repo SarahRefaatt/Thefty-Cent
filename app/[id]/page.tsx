@@ -324,6 +324,7 @@ interface Product {
   created_at: string;
   updated_at: string;
 }
+import { useCartStore } from "@/app/store/cartStore";
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -336,6 +337,7 @@ export default function ProductDetailPage() {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [activeTab, setActiveTab] = useState("details");
   const [notification, setNotification] = useState({ show: false, message: "" });
+const { fetchCart } = useCartStore.getState();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -391,6 +393,9 @@ const handleAddToCart = async () => {
         quantity:quantity,
       }),
     });
+
+    await fetchCart(); // ✅ This will immediately refresh Zustand store
+
 
     console.log(cartItemResponse)
 
@@ -692,7 +697,7 @@ return (
   </div>
 
   {/* Fixed Popover Modal - Won't close until button is pressed */}
-  {showPopover !== null && (
+  {/* {showPopover !== null && (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -744,7 +749,7 @@ return (
         </div>
       </motion.div>
     </motion.div>
-  )}
+  )} */}
 </div>
 );
 }

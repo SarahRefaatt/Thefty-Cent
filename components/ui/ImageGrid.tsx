@@ -368,6 +368,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { useCartStore } from "@/app/store/cartStore";
 
 interface Product {
   id: number
@@ -393,6 +394,7 @@ export default function EcommerceProductGrid() {
   const [addingToCart, setAddingToCart] = useState<number | null>(null)
   const [notification, setNotification] = useState({ show: false, message: "" });
   const [showPopover, setShowPopover] = useState<number | null>(null);
+const { fetchCart } = useCartStore.getState();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -467,6 +469,8 @@ setAddingToCart(null)
       //   window.location.reload();
       // }, 2200);
     // showNotification(`1 ${product.name} added to cart!`);
+await fetchCart(); // ✅ This will immediately refresh Zustand store
+
   } catch (error) {
     console.error("Error adding to cart:", error);
     showNotification("Failed to add product to cart");
@@ -519,361 +523,6 @@ setAddingToCart(null)
   }
 
   return (
-//     <div className="min-h-screen bg-gray-50 dark:bg-black px-4 sm:px-6 lg:px-8 ">
-//       <div className="max-w-7xl mx-auto">
-//         {/* Header Section */}
-//        <div className="">
-//   {/* Full-width minimalist header */}
-//   <div className="w-screen relative left-1/2 right-1/2 -mx-[50vw] mb-12 bg-black">
-//     <div className="relative h-[50vh] overflow-hidden flex items-center justify-center">
-//       <Image 
-//           height={160}
-//                 width={160}
-//                 unoptimized
-//                 priority
-//         src="/assets/IMG.JPG" 
-//         alt="Coin" 
-       
-        
-//         className="w-40 h-40 object-contain animate-coin-roll"
-//       />
-//       <div className="absolute inset-0 flex items-center justify-center">
-//         {/* Overlay text */}
-//         <h2 className="text-3xl font-bold text-white sm:text-4xl">
-//           Featured Products
-//         </h2>
-//         <p className="mt-4 text-lg text-gray-400">
-//           Discover our most popular items
-//         </p>
-//       </div>
-//     </div>
-
-
-
-    
-//   </div>
-// </div>
-
-//         {/* Products Grid */}
-//         <motion.div
-//           initial="hidden"
-//           animate="visible"
-//           variants={{
-//             hidden: { opacity: 0 },
-//             visible: {
-//               opacity: 1,
-//               transition: { staggerChildren: 0.1 },
-//             },
-//           }}
-//           className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-//         >
-//           {products.map((product) => (
-//             <motion.div
-//               key={product.id}
-//               variants={{
-//                 hidden: { opacity: 0, y: 30 },
-//                 visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-//               }}
-//               whileHover={{ y: -5 }}
-//               className="bg-white dark:bg-black rounded-xl shadow-md overflow-hidden group relative transition-all duration-300 hover:shadow-lg dark:hover:shadow-gray-800/20"
-//             >
-//               {/* Product Image */}
-//               <div className="relative overflow-hidden h-60">
-//                 <Image
-//                   src={"/assets/IMG.JPG"}
-//                   alt={product.name}
-//                   fill
-//                   className="object-cover group-hover:scale-105 transition-transform duration-300"
-//                 />
-//                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-300 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
-//                   <button
-//                     onClick={() => router.push(`/${product.id}`)}
-//                     className="bg-white dark:bg-black text-gray-900 dark:text-white p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300"
-//                     aria-label="View product details"
-//                   >
-//                     <IconEye size={20} />
-//                   </button>
-//                 </div>
-//               </div>
-
-//               {/* Product Info */}
-//               <div className="p-5">
-//                 <div className="mb-2">
-//                   <span className="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-black/30 px-2 py-1 rounded-full">
-//                     {product.category}
-//                   </span>
-//                 </div>
-
-//                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 h-14">
-//                   {product.name}
-//                 </h3>
-
-//                 <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-4 h-10">
-//                   {product.description}
-//                 </p>
-
-//                 <div className="flex items-center justify-between mt-4">
-//                   <span className="text-xl font-bold text-gray-900 dark:text-white">
-//                     {formatPrice(product.price)}
-//                   </span>
-//                   {/* <span className="text-sm text-green-600 dark:text-green-400 font-medium">
-//                     In Stock: {product.stock_quantity}
-//                   </span> */}
-//                 </div>
-
-//                 <div className="mt-4 flex items-center gap-2">
-//                   <button 
-//                     onClick={() => handleAddToCart(product.id)}
-//                     disabled={addingToCart === product.id || product.stock_quantity === 0}
-//                     className="flex-1 bg-gray-900 dark:bg-gray-900 text-white py-2 px-4 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-800 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-//                   >
-//                     {addingToCart === product.id ? (
-//                       <>
-//                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-//                         Adding...
-//                       </>
-//                     ) : (
-//                       <>
-//                         <IconShoppingCart size={18} />
-//                         Add to Cart
-//                       </>
-//                     )}
-//                   </button>
-//                      <Popover>
-//       <PopoverTrigger asChild>
-//       </PopoverTrigger>
-//       <PopoverContent className="w-80">
-//         <div className="grid gap-4">
-//           <div className="space-y-2">
-//             <h4 className="leading-none font-medium">Dimensions</h4>
-//             <p className="text-muted-foreground text-sm">
-//               Item added succssfully
-//             </p>
-//           </div>
-//           <div className="grid gap-2">
-//           continiou shopping or go to cart
-//           </div>
-//         </div>
-//       </PopoverContent>
-//     </Popover>
-
-//                   <button
-//                     onClick={() => router.push(`/${product.id}`)}
-//                     className="bg-white dark:bg-black border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
-//                     aria-label="View product details"
-//                   >
-//                     <IconEye size={20} />
-//                   </button>
-//                 </div>
-//               </div>
-//             </motion.div>
-//           ))}
-//         </motion.div>
-
-//         {products.length === 0 && !loading && (
-//           <div className="text-center py-12">
-//             <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">No products found</h3>
-//             <p className="text-gray-600 dark:text-gray-400">Check back later for new products</p>
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//  <div className="min-h-screen bg-gray-50 dark:bg-black px-4 sm:px-6 lg:px-8">
-//       <div className="max-w-7xl mx-auto">
-//         {/* Header Section */}
-//         <div className="">
-//           <div className="w-screen relative left-1/2 right-1/2 -mx-[50vw] mb-12 bg-black">
-//             <div className="relative h-[50vh] overflow-hidden flex items-center justify-center">
-//               <Image 
-//                 height={160}
-//                 width={160}
-//                 unoptimized
-//                 priority
-//                 src="/assets/IMG.JPG" 
-//                 alt="Coin" 
-//                 className="w-40 h-40 object-contain animate-coin-roll"
-//               />
-//               <div className="absolute inset-0 flex items-center justify-center flex-col">
-//                 <h2 className="text-3xl font-bold text-white sm:text-4xl">
-//                   Featured Products
-//                 </h2>
-//                 <p className="mt-4 text-lg text-gray-400">
-//                   Discover our most popular items
-//                 </p>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Products Grid */}
-//         <motion.div
-//           initial="hidden"
-//           animate="visible"
-//           variants={{
-//             hidden: { opacity: 0 },
-//             visible: {
-//               opacity: 1,
-//               transition: { staggerChildren: 0.1 },
-//             },
-//           }}
-//           className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-//         >
-//           {products.map((product) => (
-//             <motion.div
-//               key={product.id}
-//               variants={{
-//                 hidden: { opacity: 0, y: 30 },
-//                 visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-//               }}
-//               whileHover={{ y: -5 }}
-//               className="bg-white dark:bg-black rounded-xl shadow-md overflow-hidden group relative transition-all duration-300 hover:shadow-lg dark:hover:shadow-gray-800/20"
-//             >
-//               {/* Product Image - Clickable area */}
-//               <div 
-//                 className="relative overflow-hidden h-60 cursor-pointer"
-//                 onClick={() => router.push(`/${product.id}`)}
-//               >
-//                 <Image
-//                   src={"/assets/IMG.JPG"}
-//                   alt={product.name}
-//                   fill
-//                   className="object-cover group-hover:scale-105 transition-transform duration-300"
-//                 />
-//                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-300 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
-//                   <button
-//                     onClick={(e) => {
-//                       e.stopPropagation();
-//                      router.push(`/${product.id}`)
-//                     }}
-//                     className="bg-white dark:bg-black text-gray-900 dark:text-white p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300"
-//                     aria-label="View product details"
-//                   >
-//                     <IconEye size={20} />
-//                   </button>
-//                 </div>
-//               </div>
-
-//               {/* Product Info */}
-//               <div className="p-5">
-//                 <div className="mb-2">
-//                   <span className="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-black/30 px-2 py-1 rounded-full">
-//                     {product.category}
-//                   </span>
-//                 </div>
-
-//                 {/* Clickable product title */}
-//                 <h3 
-//                   className="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 h-14 cursor-pointer"
-//                   onClick={() => router.push(`/${product.id}`)}
-//                 >
-//                   {product.name}
-//                 </h3>
-
-//                 <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-4 h-10">
-//                   {product.description}
-//                 </p>
-
-//                 <div className="flex items-center justify-between mt-4">
-//                   <span className="text-xl font-bold text-gray-900 dark:text-white">
-//                     {formatPrice(product.price)}
-//                   </span>
-//                 </div>
-
-
-
-                
-//     <div className="mt-4 flex items-center gap-2">
-//       <Popover open={showPopover === product.id} onOpenChange={(open) => setShowPopover(open ? product.id : null)}>
-//         <PopoverTrigger asChild>
-//           <button
-//             onClick={(e) => {
-//               e.stopPropagation();
-//               handleAddToCart(product.id);
-//               setShowPopover(product.id); // Show the popover when added
-//             }}
-//             disabled={addingToCart === product.id || product.stock_quantity === 0}
-//             className="flex-1 bg-gray-900 dark:bg-gray-900 text-white py-2 px-4 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-800 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-//           >
-//             {addingToCart === product.id ? (
-//               <>
-//                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-//                 Adding...
-//               </>
-//             ) : (
-//               <>
-//                 <IconShoppingCart size={18} />
-//                 Add to Cart
-//               </>
-//             )}
-//           </button>
-//         </PopoverTrigger>
-
-//         {/* Full-screen animated content */}
-//         <AnimatePresence>
-//           {showPopover === product.id && (
-//             <PopoverContent
-//               asChild
-//               className="p-0 w-screen max-w-none bg-transparent border-none shadow-none"
-//               sideOffset={0}
-//               align="center"
-//             >
-//               <motion.div
-//                 initial={{ opacity: 0 }}
-//                 animate={{ opacity: 1 }}
-//                 exit={{ opacity: 0 }}
-//                 className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-//               >
-//                 <motion.div
-//                   initial={{ scale: 0.9 }}
-//                   animate={{ scale: 1 }}
-//                   exit={{ scale: 0.9 }}
-//                   transition={{ type: "spring", stiffness: 200, damping: 20 }}
-//                   className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-[90%] max-w-md p-8 text-center"
-//                 >
-//                   <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Item added to cart!</h4>
-//                   <p className="text-gray-600 dark:text-gray-300 mb-6">
-//                     <span className="font-medium">{product.name}</span> was successfully added to your shopping cart.
-//                   </p>
-//                   <div className="flex gap-4">
-//                     <button
-//                       onClick={() => setShowPopover(null)}
-//                       className="flex-1 py-3 px-4 rounded-lg bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition"
-//                     >
-//                       Continue Shopping
-//                     </button>
-//                     <button
-//                       onClick={() => router.push("/cart")}
-//                       className="flex-1 py-3 px-4 rounded-lg bg-black dark:bg-white text-white dark:text-black hover:bg-gray-900 dark:hover:bg-gray-200 transition"
-//                     >
-//                       Go to Cart
-//                     </button>
-//                   </div>
-//                 </motion.div>
-//               </motion.div>
-//             </PopoverContent>
-//           )}
-//         </AnimatePresence>
-//       </Popover>// 
-//     </div>
-
-
-
-
-
-
-
-//               </div>
-//             </motion.div>
-//           ))}
-//         </motion.div>
-
-//         {products.length === 0 && !loading && (
-//           <div className="text-center py-12">
-//             <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">No products found</h3>
-//             <p className="text-gray-600 dark:text-gray-400">Check back later for new products</p>
-//           </div>
-//         )}
-//       </div>
 
  <div className="min-h-screen bg-gray-50 dark:bg-black px-4 sm:px-6 lg:px-8">
   <div className="max-w-7xl mx-auto">
@@ -995,7 +644,7 @@ setAddingToCart(null)
     </motion.div>
 
     {/* Custom Popover Modal */}
-    {showPopover !== null && (
+    {/* {showPopover !== null && (
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -1048,7 +697,7 @@ setAddingToCart(null)
           </div>
         </motion.div>
       </motion.div>
-    )}
+    )} */}
 
     {products.length === 0 && !loading && (
       <div className="text-center py-12">

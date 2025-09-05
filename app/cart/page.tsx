@@ -325,6 +325,7 @@
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Image from "next/image";
+import { useCartStore } from "@/app/store/cartStore";
 
 interface Product {
   id: number;
@@ -378,22 +379,23 @@ export default function Cart() {
   const [taxRate] = useState(0.08);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const router = useRouter();
+// const { fetchCart } = useCartStore.getState();
+  const { fetchCart, setCartItems: setCartStoreItems } = useCartStore.getState();
 
- useEffect(() => {
+
+useEffect(() => {
   const fetchCart = async () => {
     try {
       setLoading(true);
 
-      // Load saved quantities first
-      const savedQuantities = loadQuantitiesWithExpiry();
+      const savedQuantities = loadQuantitiesWithExpiry(); // 🔥 Load cached quantities
 
-      // Fetch cart from API
       const res = await fetch("/api/carts");
       if (!res.ok) return;
       const { cartItems } = await res.json();
       setCartItems(cartItems || []);
 
-      // Merge saved quantities with server quantities
+      // 🔥 Merge saved local quantities
       const initialQuantities: { [key: number]: number } = {};
       cartItems.forEach((item: CartItem) => {
         initialQuantities[item.id] = savedQuantities[item.id] ?? item.quantity;
@@ -411,19 +413,66 @@ export default function Cart() {
   fetchCart();
 }, []);
 
+useEffect(() => {
+  setCartStoreItems(cartItems); // Sync Zustand after local updates
+}, [cartItems, setCartStoreItems]);
 
-  // Update quantity & save to localStorage
-  const updateLocalQuantity = (id: number, newQuantity: number) => {
-    if (newQuantity < 1) return;
-    setLocalQuantities(prev => {
-      const updated = {
-        ...prev,
-        [id]: newQuantity
-      };
-      saveQuantitiesWithExpiry(updated); // Save to localStorage
-      return updated;
+const updateLocalQuantity = async (id: number, newQuantity: number) => {
+  // Prevent invalid quantities
+  if (newQuantity < 1) return;
+
+  // Update UI immediately
+  setLocalQuantities(prev => ({
+    ...prev,
+    [id]: newQuantity,
+  }));
+
+  // Find the item being updated
+  const itemToUpdate = cartItems.find(item => item.id === id);
+  if (!itemToUpdate) return;
+
+  try {
+    // Update in the database
+    const res = await fetch(`/api/cartItems?id=${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        cart_id: itemToUpdate.cart_id,
+        product_id: itemToUpdate.product.id,
+        quantity: newQuantity,
+      }),
     });
-  };
+
+    if (!res.ok) {
+      throw new Error(`Failed to update item ${id}`);
+    }
+
+    // Refresh Zustand store after updating DB
+    await fetchCart();
+  } catch (error) {
+    console.error("Error updating quantity:", error);
+    alert("Could not update quantity. Please try again.");
+  }
+};
+
+
+// const updateLocalQuantity = (id: number, newQuantity: number) => {
+//   if (newQuantity < 1) return;
+
+//   // Update local states first
+//   setLocalQuantities((prev) => {
+//     const updated = { ...prev, [id]: newQuantity };
+//     saveQuantitiesWithExpiry(updated);
+//     return updated;
+//   });
+
+//   setCartItems((prev) => {
+//     const updatedCart = prev.map((item) =>
+//       item.id === id ? { ...item, quantity: newQuantity } : item
+//     );
+//     return updatedCart;
+//   });
+// };
 
 
   const removeItem = async (id: number) => {
@@ -448,6 +497,8 @@ export default function Cart() {
         delete newQuantities[id];
         return newQuantities;
       });
+      await fetchCart(); // ✅ This will immediately refresh Zustand store
+
     } catch (error) {
       console.error('Error removing item:', error);
     } finally {
