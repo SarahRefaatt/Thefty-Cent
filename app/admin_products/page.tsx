@@ -128,7 +128,7 @@ export const getColumns = (router: ReturnType<typeof useRouter>): ColumnDef<Prod
 
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
-        currency: "USD",
+        currency: "EGP",
       }).format(price);
 
       return (

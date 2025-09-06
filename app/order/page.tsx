@@ -677,16 +677,15 @@ if (!formData.phone.trim()) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12 dark:bg-black">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="bg-white rounded-lg shadow-md p-8 text-center">
-            <div className="flex justify-center items-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 max-w-md w-full mx-4">
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 border-4 border-gray-500 dark:border-gray-400 border-t-transparent rounded-full animate-spin mb-4"></div>
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Loading...</h2>
+                {/* <p className="text-gray-600 dark:text-gray-300 mt-2">Please wait while we fetch your order information.</p> */}
+              </div>
             </div>
-            <p className="text-gray-500 mt-4">Loading your order...</p>
           </div>
-        </div>
-      </div>
     );
   }
 
@@ -951,7 +950,7 @@ return (
                     <span className="text-gray-800 dark:text-gray-200">{item.product.name}</span>
                   </div>
                   <span className="font-medium text-gray-900 dark:text-white">
-                    ${(item.product.price * item.quantity).toFixed(2)}
+                    {(item.product.price * item.quantity).toFixed(2)} EGP
                   </span>
                 </div>
               ))}
@@ -960,19 +959,19 @@ return (
             <div className="space-y-3 border-t border-gray-200 dark:border-gray-700 pt-4">
               <div className="flex justify-between">
                 <span className="text-gray-600 dark:text-gray-400">Subtotal</span>
-                <span className="font-medium text-gray-900 dark:text-white">${subtotal.toFixed(2)}</span>
+                <span className="font-medium text-gray-900 dark:text-white">{subtotal.toFixed(2)} EGP</span>
               </div>
               
               <div className="flex justify-between">
                 <span className="text-gray-600 dark:text-gray-400">Shipping</span>
-                <span className="font-medium text-gray-900 dark:text-white">${shippingCost.toFixed(2)}</span>
+                <span className="font-medium text-gray-900 dark:text-white">{shippingCost.toFixed(2)} EGP</span>
               </div>
               
              
               
               <div className="flex justify-between text-lg font-bold border-t border-gray-200 dark:border-gray-700 pt-3">
                 <span className="text-gray-900 dark:text-white">Total</span>
-                <span className="text-gray-900 dark:text-white">${total.toFixed(2)}</span>
+                <span className="text-gray-900 dark:text-white">{total.toFixed(2)} EGP</span>
               </div>
             </div>
 
@@ -987,7 +986,7 @@ return (
                   Processing...
                 </div>
               ) : (
-                `Place Order - $${total.toFixed(2)}`
+                `Place Order ${total.toFixed(2)} EGP`
               )}
             </button>
 

@@ -459,7 +459,7 @@ export default function EcommerceProductGrid() {
       setShowPopover(productId);
       await fetchCart();
       
-      showNotification(`1 ${product.name} added to cart!`);
+      // showNotification(`1 ${product.name} added to cart!`);
     } catch (error) {
       console.error("Error adding to cart:", error);
       showNotification("Failed to add product to cart");
@@ -467,13 +467,20 @@ export default function EcommerceProductGrid() {
     }
   };
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(price)
-  }
+  // const formatPrice = (price: number) => {
+  //   return new Intl.NumberFormat('en-US', {
+  //     style: 'currency',
+  //     currency: 'EGP',
+  //   }).format(price)
+  // }
+const formatPrice = (price: number): string => {
+  const formattedNumber = new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(price);
 
+  return `${formattedNumber} EGP`;
+};
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-black px-4 sm:px-6 lg:px-8 py-12">
@@ -516,7 +523,7 @@ export default function EcommerceProductGrid() {
     <div className="min-h-screen bg-gray-50 dark:bg-black px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="w-screen relative left-1/2 right-1/2 -mx-[50vw] mb-12 bg-black">
+        {/* <div className="w-screen relative left-1/2 right-1/2 -mx-[50vw] mb-12 bg-black">
           <div className="relative h-[50vh] overflow-hidden flex items-center justify-center">
             <Image
               height={160}
@@ -532,7 +539,61 @@ export default function EcommerceProductGrid() {
               <p className="mt-4 text-lg text-gray-400">Discover our most popular items</p>
             </div>
           </div>
+        </div> */}
+{/* Header Section with 3D Rotating Coin */}
+<div className="w-screen relative left-1/2 right-1/2 -mx-[50vw] mb-12 bg-black">
+  <div className="relative h-[50vh] overflow-hidden flex flex-col items-center justify-center">
+    
+    {/* Coin Container with 3D Effect */}
+    <div className="relative w-40 h-40 perspective-1000 mb-6">
+      <div className="relative w-full h-full animate-coin-roll transform-style-3d">
+        
+        {/* Front Face */}
+        <div className="absolute inset-0 rounded-full overflow-hidden backface-hidden bg-black">
+          <div className="relative w-full h-full rounded-full overflow-hidden">
+            <Image
+              src="/assets/IMG.JPG"
+              alt="Coin Front"
+              fill
+              className="object-cover"
+            />
+          </div>
+          <div className="absolute inset-0 rounded-full border-4 border-black" />
         </div>
+
+        {/* Back Face */}
+        <div className="absolute inset-0 rounded-full overflow-hidden backface-hidden rotate-y-180 bg-black">
+          <div className="relative w-full h-full rounded-full overflow-hidden">
+            <Image
+              src="/assets/IMG - Copy.JPG"
+              alt="Coin Back"
+              fill
+              className="object-cover"
+            />
+          </div>
+          <div className="absolute inset-0 rounded-full border-4 border-black" />
+        </div>
+
+        {/* Edge */}
+        <div
+          className="absolute inset-0 rounded-full border-8 border-black"
+          style={{
+            transform: 'translateZ(-4px)',
+            boxShadow: 'inset 0 0 25px rgba(0, 0, 0, 0.6)',
+          }}
+        />
+      </div>
+    </div>
+
+    {/* Header Text */}
+    <div className="text-center">
+      <h2 className="text-3xl font-bold text-white sm:text-4xl">Featured Products</h2>
+      <p className="mt-4 text-lg text-gray-400">Discover our most popular items</p>
+    </div>
+
+    
+  </div>
+</div>
 
         {/* Products Grid */}
         <motion.div
@@ -542,7 +603,7 @@ export default function EcommerceProductGrid() {
             hidden: { opacity: 0 },
             visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
           }}
-          className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4"
         >
           {products.map((product) => (
             <motion.div
@@ -591,11 +652,11 @@ export default function EcommerceProductGrid() {
 
               {/* Product Info */}
               <div className="p-5">
-                <div className="mb-2">
+                {/* <div className="mb-2">
                   <span className="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-black/30 px-2 py-1 rounded-full">
                     {product.category}
                   </span>
-                </div>
+                </div> */}
 
                 <h3
                   className="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 h-14 cursor-pointer"
@@ -612,14 +673,12 @@ export default function EcommerceProductGrid() {
                   <span className="text-xl font-bold text-gray-900 dark:text-white">
                     {formatPrice(product.price)}
                   </span>
-                  {product.stock_quantity > 0 ? (
-                    <span className="text-sm text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded-full">
-                      In Stock
-                    </span>
-                  ) : (
-                    <span className="text-sm text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30 px-2 py-1 rounded-full">
+                  {product.stock_quantity <= 0 ? (
+                       <span className="text-sm text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30 px-2 py-1 rounded-full">
                       Out of Stock
                     </span>
+                  ) : (
+                 <div></div>
                   )}
                 </div>
 
@@ -636,12 +695,12 @@ export default function EcommerceProductGrid() {
                     {addingToCart === product.id ? (
                       <>
                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        Adding...
+                        Stealing...
                       </>
                     ) : (
                       <>
                         <IconShoppingCart size={18} />
-                        {product.stock_quantity > 0 ? 'Add to Cart' : 'Out of Stock'}
+                        {product.stock_quantity > 0 ? 'Steal It' : 'Out of Stock'}
                       </>
                     )}
                   </button>
@@ -652,11 +711,11 @@ export default function EcommerceProductGrid() {
         </motion.div>
 
         {/* Notification */}
-        {notification.show && (
+        {/* {notification.show && (
           <div className="fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg">
             {notification.message}
           </div>
-        )}
+        )} */}
 
         {products.length === 0 && !loading && (
           <div className="text-center py-12">
@@ -666,7 +725,19 @@ export default function EcommerceProductGrid() {
         )}
       </div>
 
-      <style jsx>{`
+        <style jsx>{`
+        .perspective-1000 {
+          perspective: 1000px;
+        }
+        
+        .backface-hidden {
+          backface-visibility: hidden;
+        }
+        
+        .rotate-y-180 {
+          transform: rotateY(180deg);
+        }
+        
         @keyframes coin-roll {
           0% {
             transform: rotateY(0deg);
@@ -690,6 +761,7 @@ export default function EcommerceProductGrid() {
           transform-style: preserve-3d;
         }
       `}</style>
+
     </div>
   )
 }

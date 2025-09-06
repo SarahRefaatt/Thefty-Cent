@@ -432,12 +432,22 @@ const handleAddToCart = async () => {
     }
   };
 
-  const formatPrice = (price: string) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(parseFloat(price));
-  };
+  // const formatPrice = (price: string) => {
+  //   return new Intl.NumberFormat('en-US', {
+  //     style: 'currency',
+  //     currency: 'EGP',
+  //         currencyDisplay: "code", // Shows "EGP" instead of the symbol
+
+  //   }).format(parseFloat(price));
+  // };
+const formatPrice = (price: number): string => {
+  const formattedNumber = new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(price);
+
+  return `${formattedNumber} EGP`;
+};
 
 
   
@@ -557,13 +567,13 @@ return (
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{product.name}</h1>
             </div>
             
-            <div className="flex items-center mb-4">
+            {/* <div className="flex items-center mb-4">
               <span className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs font-semibold px-2.5 py-0.5 rounded">
                 {product.category}
               </span>
               <span className="mx-3 text-gray-400">•</span>
               <span className="text-gray-500 dark:text-gray-400 text-sm">SKU: {product.sku}</span>
-            </div>
+            </div> */}
             
             <div className="mb-6">
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{product.description}</p>
@@ -571,7 +581,8 @@ return (
             
             {/* Pricing */}
             <div className="flex items-center mb-6">
-              <span className="text-3xl font-bold text-gray-900 dark:text-white">{formatPrice(product.price)}</span>
+              <span className="text-3xl font-bold text-gray-900 dark:text-white">{formatPrice(Number(product.price))}
+</span>
             </div>
           </div>
           
@@ -673,7 +684,7 @@ return (
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Product Description</h3>
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{product.description}</p>
                 
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mt-8 mb-4">Additional Information</h3>
+                {/* <h3 className="text-lg font-medium text-gray-900 dark:text-white mt-8 mb-4">Additional Information</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400">Category</p>
@@ -683,7 +694,7 @@ return (
                     <p className="text-sm text-gray-500 dark:text-gray-400">Brand</p>
                     <p className="text-gray-900 dark:text-white">{product.brand}</p>
                   </div>
-                </div>
+                </div> */}
               </motion.div>
             )}
             
@@ -695,10 +706,10 @@ return (
               >
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Technical Specifications</h3>
                 <dl className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
-                  <div className="sm:col-span-1">
+                  {/* <div className="sm:col-span-1">
                     <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">SKU</dt>
                     <dd className="mt-1 text-sm text-gray-900 dark:text-white">{product.sku}</dd>
-                  </div>
+                  </div> */}
                   <div className="sm:col-span-1">
                     <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Weight</dt>
                     <dd className="mt-1 text-sm text-gray-900 dark:text-white">{product.weight} kg</dd>
@@ -707,10 +718,10 @@ return (
                     <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Dimensions</dt>
                     <dd className="mt-1 text-sm text-gray-900 dark:text-white">{product.dimensions}</dd>
                   </div>
-                  <div className="sm:col-span-1">
+                  {/* <div className="sm:col-span-1">
                     <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Stock Quantity</dt>
                     <dd className="mt-1 text-sm text-gray-900 dark:text-white">{product.stock_quantity}</dd>
-                  </div>
+                  </div> */}
                 </dl>
               </motion.div>
             )}

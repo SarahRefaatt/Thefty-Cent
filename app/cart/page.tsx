@@ -700,7 +700,7 @@ const updateLocalQuantity = async (id: number, newQuantity: number) => {
                       </div>
                       
                       <div className="text-lg font-bold text-gray-900 dark:text-white">
-                        ${((product.price || 0) * currentQuantity).toFixed(2)}
+                        {((product.price || 0) * currentQuantity).toFixed(2)} EGP
                       </div>
                     </div>
                   );
@@ -717,12 +717,12 @@ const updateLocalQuantity = async (id: number, newQuantity: number) => {
               <div className="space-y-4">
                 <div className="flex justify-between">
                   <span className="text-gray-600 dark:text-gray-400">Subtotal ({cartItems.reduce((sum, item) => sum + (localQuantities[item.id] || item.quantity), 0)} items)</span>
-                  <span className="font-medium text-gray-900 dark:text-white">${subtotal.toFixed(2)}</span>
+                  <span className="font-medium text-gray-900 dark:text-white">{subtotal.toFixed(2)} EGP</span>
                 </div>
                 
                 <div className="flex justify-between">
                   <span className="text-gray-600 dark:text-gray-400">Shipping</span>
-                  <span className="font-medium text-gray-900 dark:text-white">${shippingCost.toFixed(2)}</span>
+                  <span className="font-medium text-gray-900 dark:text-white">{shippingCost.toFixed(2)} EGP</span>
                 </div>
                 
                 {/* <div className="flex justify-between">
@@ -733,7 +733,7 @@ const updateLocalQuantity = async (id: number, newQuantity: number) => {
                 <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
                   <div className="flex justify-between text-lg font-bold">
                     <span className="text-gray-900 dark:text-white">Total</span>
-                    <span className="text-gray-900 dark:text-white">${total.toFixed(2)}</span>
+                    <span className="text-gray-900 dark:text-white">{total.toFixed(2)} EGP</span>
                   </div>
                 </div>
                 

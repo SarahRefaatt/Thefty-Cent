@@ -525,7 +525,9 @@ function ProductForm({ mode, initialData, onSuccess, onCancel }: ProductFormProp
         description: initialData.description || "",
         price: initialData.price.toString() || "",
         stock_quantity: initialData.stock_quantity.toString() || "",
-        sku: initialData.sku || "",
+        // sku: initialData.sku || "",
+          sku: generateSKU(),
+
         category: initialData.category || "",
         brand: initialData.brand || "",
         weight: initialData.weight.toString() || "",
@@ -574,9 +576,9 @@ function ProductForm({ mode, initialData, onSuccess, onCancel }: ProductFormProp
       newErrors.price = 'Valid price is required';
     if (!formData.stock_quantity || isNaN(Number(formData.stock_quantity)) || Number(formData.stock_quantity) < 0) 
       newErrors.stock_quantity = 'Valid stock quantity is required';
-    if (!formData.sku.trim()) newErrors.sku = 'SKU is required';
-    if (!formData.category.trim()) newErrors.category = 'Category is required';
-    if (!formData.brand.trim()) newErrors.brand = 'Brand is required';
+    // if (!formData.sku.trim()) newErrors.sku = 'SKU is required';
+    // if (!formData.category.trim()) newErrors.category = 'Category is required';
+    // if (!formData.brand.trim()) newErrors.brand = 'Brand is required';
     if (!formData.weight || isNaN(Number(formData.weight)) || Number(formData.weight) <= 0) 
       newErrors.weight = 'Valid weight is required';
     if (!formData.dimensions.trim()) newErrors.dimensions = 'Dimensions are required';
@@ -584,6 +586,14 @@ function ProductForm({ mode, initialData, onSuccess, onCancel }: ProductFormProp
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
+  const generateSKU = (): string => {
+  const prefix = "SKU";
+  const timestamp = Date.now().toString(36); // base-36 for compactness
+  const randomStr = Math.random().toString(36).substring(2, 6).toUpperCase(); // 4 random chars
+  return `${prefix}-${timestamp}-${randomStr}`;
+};
+
 
   // const handleSubmit = async (e: React.FormEvent) => {
   //   e.preventDefault();
@@ -815,7 +825,7 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             </div>
 
             <div>
-              <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price ($)</label>
+              <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price (EGP)</label>
               <input
                 type="number"
                 name="price"
@@ -843,7 +853,7 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               {errors.stock_quantity && <p className="mt-1 text-sm text-red-600">{errors.stock_quantity}</p>}
             </div>
 
-            <div>
+            {/* <div>
               <label htmlFor="sku" className="block text-sm font-medium text-gray-700">SKU</label>
               <input
                 type="text"
@@ -855,9 +865,9 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                 className={`mt-1 block w-full rounded-md border p-2 ${errors.sku ? 'border-red-500' : 'border-gray-300'} shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm`}
               />
               {errors.sku && <p className="mt-1 text-sm text-red-600">{errors.sku}</p>}
-            </div>
+            </div> */}
 
-            <div>
+            {/* <div>
               <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
               <input
                 type="text"
@@ -881,7 +891,7 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                 className={`mt-1 block w-full rounded-md border p-2 ${errors.brand ? 'border-red-500' : 'border-gray-300'} shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm`}
               />
               {errors.brand && <p className="mt-1 text-sm text-red-600">{errors.brand}</p>}
-            </div>
+            </div> */}
 
             <div>
               <label htmlFor="weight" className="block text-sm font-medium text-gray-700">Weight (kg)</label>

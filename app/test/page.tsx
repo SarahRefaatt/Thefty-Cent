@@ -131,6 +131,9 @@
 //     </div>
 //   );
 // }
+
+
+
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -147,17 +150,18 @@ export default function ImageCoinRoll() {
     setIsRolling(true);
   }, []);
 
-  const handlePasswordSubmit = () => {
-    setRedirecting(true)
-    router.push('/')
-    
-  };
+const handlePasswordSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
+  setRedirecting(true);
+  router.push('/');
+};
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex flex-col items-center justify-center p-6">
  <span
   suppressHydrationWarning
-  className="bg-gradient-to-r from-yellow-600 to-red-700 bg-clip-text text-transparent"
+  className="bg-gradient-to-r from-yellow-600 to-red-700 bg-clip-text text-transparent text-bold"
 >
   Thefty Cent
 </span>

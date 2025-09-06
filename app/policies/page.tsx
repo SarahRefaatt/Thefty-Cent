@@ -202,7 +202,7 @@ export default function Policies() {
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">International Returns</h3>
                   <p className="text-gray-900">
                     International customers are responsible for return shipping costs and any customs duties. 
-                    Refunds will be issued in USD and may be subject to currency conversion fees.
+                    Refunds will be issued in EGP and may be subject to currency conversion fees.
                   </p>
                 </div>
 
