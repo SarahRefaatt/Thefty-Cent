@@ -430,7 +430,7 @@ export default function Dashboard() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow p-6 flex items-center">
             <div className="rounded-full bg-blue-100 p-3 mr-4">
               <Package className="h-6 w-6 text-blue-600" />
@@ -450,7 +450,7 @@ export default function Dashboard() {
               <p className="text-2xl font-bold text-gray-900">{ordersCount}</p>
             </div>
           </div>
-        </div>
+        </div> */}
 
                <h2 className="text-xl font-semibold text-gray-900 mb-4">Management Sections</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
