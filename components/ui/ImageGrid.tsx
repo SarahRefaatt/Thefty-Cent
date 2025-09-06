@@ -659,17 +659,17 @@ const formatPrice = (price: number): string => {
                 </div> */}
 
                 <h3
-                  className="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 h-14 cursor-pointer"
+                  className="text-lg font-semibold text-gray-900 dark:text-white  line-clamp-2 h-14 cursor-pointer"
                   onClick={() => router.push(`/${product.id}`)}
                 >
                   {product.name}
                 </h3>
 
-                <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-4 h-10">
+                {/* <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-4 h-10">
                   {product.description}
-                </p>
+                </p> */}
 
-                <div className="flex items-center justify-between mt-4">
+                <div className="flex items-center justify-between ">
                   <span className="text-xl font-bold text-gray-900 dark:text-white">
                     {formatPrice(product.price)}
                   </span>
@@ -699,8 +699,8 @@ const formatPrice = (price: number): string => {
                       </>
                     ) : (
                       <>
-                        <IconShoppingCart size={18} />
-                        {product.stock_quantity > 0 ? 'Steal It' : 'Out of Stock'}
+                        {/* <IconShoppingCart size={18} /> */}
+                        {product.stock_quantity > 0 ? 'Steal' : 'Out of Stock'}
                       </>
                     )}
                   </button>
@@ -757,7 +757,7 @@ const formatPrice = (price: number): string => {
         }
         
         .animate-coin-roll {
-          animation: coin-roll 4s forwards;
+          animation: coin-roll 2s forwards;
           transform-style: preserve-3d;
         }
       `}</style>

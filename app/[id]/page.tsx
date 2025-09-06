@@ -563,7 +563,7 @@ return (
         {/* Product Info */}
         <div className="flex flex-col justify-between">
           <div>
-            <div className="flex justify-between items-start mb-2">
+            <div className="flex justify-between items-start ">
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{product.name}</h1>
             </div>
             
@@ -575,12 +575,12 @@ return (
               <span className="text-gray-500 dark:text-gray-400 text-sm">SKU: {product.sku}</span>
             </div> */}
             
-            <div className="mb-6">
+            {/* <div className="mb-6">
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{product.description}</p>
-            </div>
+            </div> */}
             
             {/* Pricing */}
-            <div className="flex items-center mb-6">
+            <div className="flex items-center mb-6 mt-2">
               <span className="text-3xl font-bold text-gray-900 dark:text-white">{formatPrice(Number(product.price))}
 </span>
             </div>
@@ -589,7 +589,7 @@ return (
           <div>
             {/* Quantity Selector */}
             <div className="mb-6">
-              <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-2">Quantity</h3>
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-4">Quantity</h3>
               <div className="flex items-center">
                 <button
                   onClick={decrementQuantity}
@@ -628,16 +628,16 @@ return (
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Adding to Cart...
+                    Stealing...
                   </>
                 ) : product.stock_quantity === 0 ? (
                   "Out of Stock"
                 ) : (
                   <>
-                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    {/* <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                    Add to Cart
+                    </svg> */}
+                    Steal
                   </>
                 )}
               </button>
