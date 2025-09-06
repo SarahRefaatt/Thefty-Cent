@@ -684,12 +684,16 @@ const handleSubmit = async (e: React.FormEvent) => {
       }
     });
 
+    // const url = mode === "edit" && initialData
+    //   ? `/api/products?id=${initialData.id}`
+    //   : "/api/products";
     const url = mode === "edit" && initialData
       ? `/api/products?id=${initialData.id}`
-      : "/api/products";
-
+      : mode === "delete" && initialData
+      ? `/api/products?id=${initialData.id}` // send ID in query for DELETE
+      : "/api/products"
     const method = mode === "edit" ? "PUT" : mode === "delete" ? "DELETE" : "POST";
-
+// console.log(method,url+`?id=${initialData.id}` )
     const response = await fetch(url, {
       method,
       body: method !== "DELETE" ? formDataObj : undefined,

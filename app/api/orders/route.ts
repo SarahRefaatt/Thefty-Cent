@@ -196,6 +196,7 @@ const { data, error } = await supabase.rpc("create_order_with_items", {
   p_shipping_country: shipping_country,
   p_shipping_state: shipping_state,
   p_status: status,
+  
 });
 
   if (error) return new Response(JSON.stringify({ error: error.message }), { status: 500 });
