@@ -13,7 +13,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, Eye, MoreHorizontal } from "lucide-react"
+import { ChevronDown, Eye, MoreHorizontal } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 // import { Checkbox } from "@/components/ui/checkbox"

@@ -320,7 +320,7 @@ interface Product {
   brand: string;
   weight: number;
   dimensions: string;
-  image_url: string[];
+  image_urls: string[];
   created_at: string;
   updated_at: string;
 }
@@ -328,7 +328,7 @@ import { useCartStore } from "@/app/store/cartStore";
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const router = useRouter();
+  // const router = useRouter();
   const productId = parseInt(id, 10);
   
   const [product, setProduct] = useState<Product | null>(null);
@@ -439,6 +439,9 @@ const handleAddToCart = async () => {
     }).format(parseFloat(price));
   };
 
+
+  
+
 if (!product) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-black">
@@ -449,7 +452,17 @@ if (!product) {
     </div>
   );
 }
+const nextImage = () => {
+    setSelectedImage((prev) =>
+      prev === product.image_urls.length - 1 ? 0 : prev + 1
+    );
+  };
 
+  const prevImage = () => {
+    setSelectedImage((prev) =>
+      prev === 0 ? product.image_urls.length - 1 : prev - 1
+    );
+  };
 return (
 <div className="min-h-screen bg-gray-50 dark:bg-black py-8">
   {/* Notification */}
@@ -480,7 +493,7 @@ return (
               className="w-full h-full relative"
             >
               <Image
-                src={"/assets/IMG.JPG"}
+                src={product.image_urls[selectedImage]}
                 alt={product.name}
                 fill
                 className="object-cover"
@@ -501,9 +514,9 @@ return (
             )}
           </div>
           
-          {product.image_url && product.image_url.length > 1 && (
+          {product.image_urls && product.image_urls.length > 1 && (
             <div className="grid grid-cols-4 gap-2">
-              {product.image_url.map((image, index) => (
+              {product.image_urls.map((image, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
@@ -513,12 +526,23 @@ return (
                       : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
                   }`}
                 >
-                  <Image
+                  {/* <Image
                     width={80}
                     height={80}
                     src={"/assets/IMG.JPG"}
                     alt={`${product.name} view ${index + 1}`}
                     className="w-full h-full object-cover"
+                  /> */}
+                 <Image
+                    src={image}
+                    alt={product.name}
+                     width={80}
+                    height={80}
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      // Fallback if image fails to load
+                      e.currentTarget.src = image;
+                    }}
                   />
                 </button>
               ))}

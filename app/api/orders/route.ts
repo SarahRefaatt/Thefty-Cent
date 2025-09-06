@@ -2,7 +2,7 @@
 import { supabase } from "@/lib/supabaseClient";
 
 const STATUS_ENUM = ["pending", "paid", "shipped", "delivered", "cancelled"];
-const PAYMENT_METHOD_ENUM = ["credit_card", "paypal"];
+const PAYMENT_METHOD_ENUM = ["cash_on_delivery", "Instapay"];
 const PAYMENT_STATUS_ENUM = ["unpaid", "paid", "refunded"];
 
 // GET Orders
@@ -31,7 +31,8 @@ export async function GET(req: Request) {
             description,
             stock_quantity,
             sku,
-            category
+            category,
+            image_urls
           )
         )
       `)
@@ -159,28 +160,43 @@ export async function POST(req: Request) {
     payment_status = "unpaid",
     shipping_address,
     billing_address,
-    shipping_city,
+    floor,
     shipping_state,
-    shipping_postal_code,
+    appartment_number,
     shipping_country,
   } = await req.json();
 
-  const { data, error } = await supabase.rpc("create_order_with_items", {
-    p_customer_id: customer_id,
-    p_customer_name: customer_name,
-    p_customer_email: customer_email,
-    p_customer_phone: customer_phone,
-    p_cart_id: cart_id,
-    p_status: status,
-    p_payment_method: payment_method,
-    p_payment_status: payment_status,
-    p_shipping_address: shipping_address,
-    p_billing_address: billing_address,
-    p_shipping_city: shipping_city,
-    p_shipping_state: shipping_state,
-    p_shipping_postal_code: shipping_postal_code,
-    p_shipping_country: shipping_country,
-  });
+  // const { data, error } = await supabase.rpc("create_order_with_items", {
+  //   p_customer_id: customer_id,
+  //   p_customer_name: customer_name,
+  //   p_customer_email: customer_email,
+  //   p_customer_phone: customer_phone,
+  //   p_cart_id: cart_id,
+  //   p_status: status,
+  //   p_payment_method: payment_method,
+  //   p_payment_status: payment_status,
+  //   p_shipping_address: shipping_address,
+  //   p_billing_address: billing_address,
+  //   p_floor: floor,
+  //   p_shipping_state: shipping_state,
+  //   p_appartment_number: appartment_number,
+  //   p_shipping_country: shipping_country,
+  // });
+const { data, error } = await supabase.rpc("create_order_with_items", {
+  p_billing_address: billing_address,
+  p_cart_id: cart_id,
+  p_customer_email: customer_email,
+  p_customer_id: customer_id,
+  p_customer_name: customer_name,
+  p_customer_phone: customer_phone,
+  p_floor: floor,
+  p_payment_method: payment_method,
+  p_payment_status: payment_status,
+  p_shipping_address: shipping_address,
+  p_shipping_country: shipping_country,
+  p_shipping_state: shipping_state,
+  p_status: status,
+});
 
   if (error) return new Response(JSON.stringify({ error: error.message }), { status: 500 });
 
@@ -206,9 +222,9 @@ export async function PUT(req: Request) {
     total_amount,
     shipping_address,
     billing_address,
-    shipping_city,
+    floor,
     shipping_state,
-    shipping_postal_code,
+    appartment_number,
     shipping_country,
   } = await req.json();
 
@@ -251,9 +267,9 @@ export async function PUT(req: Request) {
       total_amount,
       shipping_address,
       billing_address,
-      shipping_city,
+      floor,
       shipping_state,
-      shipping_postal_code,
+      appartment_number,
       shipping_country,
       updated_at: new Date().toISOString(),
     })

@@ -150,6 +150,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useCartStore } from "@/app/store/cartStore";
+import Link from "next/link";
 
 export function SiteHeader() {
   const router = useRouter();
@@ -212,16 +213,33 @@ export function SiteHeader() {
   };
 
   if (!mounted) return null;
+              // <Image
 
+              // width={160}
+              //       height={160}
+              //   src="/assets/IMG - Copy.JPG"
+              //   alt="Coin Back" 
+              //   className="w-full h-full object-cover"
+              // />
   return (
     <header className="sticky top-0 z-50 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 shadow-sm h-16 transition-colors duration-300">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6 h-full">
-        <div className="flex items-center ml-2 lg:ml-0">
+        {/* <div className="flex items-center ml-2 lg:ml-0">
           <h1 className="text-xl font-bold text-gray-900 dark:text-white absolute left-1/2 -translate-x-1/2 text-center">
             Thefty Cent
           </h1>
-        </div>
-
+        </div> */}
+<div className="flex items-center ml-2 lg:ml-0">
+  <Link href="/" className="absolute left-1/2 -translate-x-1/2">
+    <Image
+      width={100}
+      height={100}
+      src="/assets/IMG.JPG"
+      alt="Logo"
+      className="w-10 h-10 object-cover rounded-full"
+    />
+  </Link>
+</div>
         <div className="ml-auto flex items-center gap-4">
 
            {/* ✅ Admin Button */}

@@ -310,7 +310,7 @@ type Product = {
   brand: string;
   weight: number;
   dimensions: string;
-  image_urls: string | null;
+  image_urls: string[]; // ✅ Change this from string | null to string[]
   promo_codes: string | null;
   created_at: string;
   updated_at: string;
@@ -473,20 +473,47 @@ interface ProductFormProps {
 }
 
 function ProductForm({ mode, initialData, onSuccess, onCancel }: ProductFormProps) {
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    price: "",
-    stock_quantity: "",
-    sku: "",
-    category: "",
-    brand: "",
-    weight: "",
-    dimensions: "",
-    image_urls: "",
-    promo_codes: "",
-  });
-  
+  // const [formData, setFormData] = useState({
+  //   name: "",
+  //   description: "",
+  //   price: "",
+  //   stock_quantity: "",
+  //   sku: "",
+  //   category: "",
+  //   brand: "",
+  //   weight: "",
+  //   dimensions: "",
+  //   image_urls: "",
+  //   promo_codes: "",
+  // });
+  const [formData, setFormData] = useState<{
+  name: string;
+  description: string;
+  price: string;
+  stock_quantity: string;
+  sku: string;
+  category: string;
+  brand: string;
+  weight: string;
+  dimensions: string;
+  image_urls: string[]; // ✅ Change this from string | null to string[]
+  promo_codes: string;
+  files?: File[];
+}>({
+  name: "",
+  description: "",
+  price: "",
+  stock_quantity: "",
+  sku: "",
+  category: "",
+  brand: "",
+  weight: "",
+  dimensions: "",
+  image_urls: [],
+  promo_codes: "",
+  files: [],
+});
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -503,7 +530,7 @@ function ProductForm({ mode, initialData, onSuccess, onCancel }: ProductFormProp
         brand: initialData.brand || "",
         weight: initialData.weight.toString() || "",
         dimensions: initialData.dimensions || "",
-        image_urls: initialData.image_urls || "",
+        image_urls: initialData.image_urls || [],
         promo_codes: initialData.promo_codes || "",
       });
     } else {
@@ -518,7 +545,7 @@ function ProductForm({ mode, initialData, onSuccess, onCancel }: ProductFormProp
         brand: "",
         weight: "",
         dimensions: "",
-        image_urls: "",
+        image_urls: [],
         promo_codes: "",
       });
     }
@@ -558,86 +585,168 @@ function ProductForm({ mode, initialData, onSuccess, onCancel }: ProductFormProp
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
     
-    if (mode !== "delete" && !validateForm()) return;
+  //   if (mode !== "delete" && !validateForm()) return;
     
-    setIsSubmitting(true);
-    setSubmitMessage("");
+  //   setIsSubmitting(true);
+  //   setSubmitMessage("");
     
-    try {
-      let url = `/api/products`;
-      let method = "POST";
+  //   try {
+  //     let url = `/api/products`;
+  //     let method = "POST";
       
-      if (mode === "edit" && initialData) {
-        url = `/api/products?id=${initialData.id}`;
-        method = "PUT";
-      } else if (mode === "delete" && initialData) {
-        url = `/api/products?id=${initialData.id}`;
-        method = "DELETE";
-      }
+  //     if (mode === "edit" && initialData) {
+  //       url = `/api/products?id=${initialData.id}`;
+  //       method = "PUT";
+  //     } else if (mode === "delete" && initialData) {
+  //       url = `/api/products?id=${initialData.id}`;
+  //       method = "DELETE";
+  //     }
       
-      let body;
-      if (mode !== "delete") {
-        body = JSON.stringify({
-          ...formData,
-          price: parseFloat(formData.price),
-          stock_quantity: parseInt(formData.stock_quantity),
-          weight: parseFloat(formData.weight),
-          image_urls: formData.image_urls ? formData.image_urls.split(',').map(url => url.trim()) : null,
-          promo_codes: formData.promo_codes ? formData.promo_codes.split(',').map(code => code.trim()) : null
+  //     let body;
+  //     if (mode !== "delete") {
+  //       body = JSON.stringify({
+  //         ...formData,
+  //         price: parseFloat(formData.price),
+  //         stock_quantity: parseInt(formData.stock_quantity),
+  //         weight: parseFloat(formData.weight),
+  //         image_urls: formData.image_urls ? formData.image_urls.split(',').map(url => url.trim()) : null,
+  //         promo_codes: formData.promo_codes ? formData.promo_codes.split(',').map(code => code.trim()) : null
+  //       });
+  //     }
+      
+  //     const response = await fetch(url, {
+  //       method,
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: method !== "DELETE" ? body : undefined,
+  //     }
+  //   );
+
+  //   console.log(response,"data: ",body,"method: ",method,"url: ",url)
+      
+  //     if (response.ok) {
+  //       setSubmitMessage(
+  //         mode === "delete" 
+  //           ? "Product deleted successfully" 
+  //           : `Product ${mode === "edit" ? "updated" : "added"} successfully`
+  //       );
+        
+  //       // Reset form after successful submission
+  //       if (mode === "create" || mode === "delete") {
+  //         setFormData({
+  //           name: "",
+  //           description: "",
+  //           price: "",
+  //           stock_quantity: "",
+  //           sku: "",
+  //           category: "",
+  //           brand: "",
+  //           weight: "",
+  //           dimensions: "",
+  //           image_urls: "",
+  //           promo_codes: "",
+  //         });
+  //       }
+        
+  //       // Notify parent component to refresh product list
+  //       onSuccess();
+  //     } else {
+  //       const errorData = await response.json();
+  //       console.log(errorData)
+  //       setSubmitMessage(`Error: ${errorData.message || 'Failed to process request'}`);
+  //     }
+  //   } catch (error) {
+  //     setSubmitMessage('Error: Failed to connect to server');
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (mode !== "delete" && !validateForm()) return;
+
+  setIsSubmitting(true);
+  setSubmitMessage("");
+
+  try {
+    const formDataObj = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key === "files" && value) {
+        (value as File[]).forEach((file) => {
+          formDataObj.append("files", file);
         });
+      } else {
+        formDataObj.append(key, value as string);
       }
-      
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: method !== "DELETE" ? body : undefined,
-      }
+    });
+
+    const url = mode === "edit" && initialData
+      ? `/api/products?id=${initialData.id}`
+      : "/api/products";
+
+    const method = mode === "edit" ? "PUT" : mode === "delete" ? "DELETE" : "POST";
+
+    const response = await fetch(url, {
+      method,
+      body: method !== "DELETE" ? formDataObj : undefined,
+    });
+
+    if (!response.ok) throw new Error("Failed to save product");
+
+    setSubmitMessage(
+      mode === "delete"
+        ? "Product deleted successfully"
+        : `Product ${mode === "edit" ? "updated" : "added"} successfully`
     );
 
-    console.log(response,"data: ",body,"method: ",method,"url: ",url)
-      
-      if (response.ok) {
-        setSubmitMessage(
-          mode === "delete" 
-            ? "Product deleted successfully" 
-            : `Product ${mode === "edit" ? "updated" : "added"} successfully`
-        );
-        
-        // Reset form after successful submission
-        if (mode === "create" || mode === "delete") {
-          setFormData({
-            name: "",
-            description: "",
-            price: "",
-            stock_quantity: "",
-            sku: "",
-            category: "",
-            brand: "",
-            weight: "",
-            dimensions: "",
-            image_urls: "",
-            promo_codes: "",
-          });
-        }
-        
-        // Notify parent component to refresh product list
-        onSuccess();
-      } else {
-        const errorData = await response.json();
-        console.log(errorData)
-        setSubmitMessage(`Error: ${errorData.message || 'Failed to process request'}`);
-      }
-    } catch (error) {
-      setSubmitMessage('Error: Failed to connect to server');
-    } finally {
-      setIsSubmitting(false);
+    if (mode === "create" || mode === "delete") {
+      setFormData({
+        name: "",
+        description: "",
+        price: "",
+        stock_quantity: "",
+        sku: "",
+        category: "",
+        brand: "",
+        weight: "",
+        dimensions: "",
+        image_urls: [],
+        promo_codes: "",
+        files: [],
+      });
+      setPreviewUrls([]);
     }
-  };
+
+    onSuccess();
+  } catch (error) {
+    setSubmitMessage("Error: Failed to connect to server");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+const handleRemoveImage = (index: number) => {
+  setFormData((prev) => ({
+    ...prev,
+    files: prev.files?.filter((_, i) => i !== index) || [],
+  }));
+
+  setPreviewUrls((prev) => prev.filter((_, i) => i !== index));
+};
+
+const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+
+const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const files = Array.from(e.target.files || []);
+  setFormData((prev) => ({ ...prev, files }));
+
+  const urls = files.map((file) => URL.createObjectURL(file));
+  setPreviewUrls(urls);
+};
+
 
   const title =
     mode === "create"
@@ -798,20 +907,42 @@ function ProductForm({ mode, initialData, onSuccess, onCancel }: ProductFormProp
               />
               {errors.dimensions && <p className="mt-1 text-sm text-red-600">{errors.dimensions}</p>}
             </div>
+<div className="sm:col-span-2">
+  <label htmlFor="images" className="block text-sm font-medium text-gray-700">
+    Upload Images
+  </label>
+  <input
+    type="file"
+    id="images"
+    accept="image/*"
+    multiple
+    onChange={handleFileChange}
+    className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
+  />
+  {previewUrls.length > 0 && (
+    <div className="mt-2 flex flex-wrap gap-2">
+      {previewUrls.map((url, index) => (
+        <div key={index} className="relative">
+          <img
+            src={url}
+            alt={`Preview ${index + 1}`}
+            className="max-h-24 rounded-lg border"
+          />
+          <button
+            type="button"
+            onClick={() => handleRemoveImage(index)}
+            className="absolute top-0 right-0 bg-red-500 text-white rounded-full px-1.5 py-0.5 text-xs shadow-md hover:bg-red-600"
+          >
+            ✕
+          </button>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
 
-            <div className="sm:col-span-2">
-              <label htmlFor="image_urls" className="block text-sm font-medium text-gray-700">Image URLs (comma separated)</label>
-              <input
-                type="text"
-                name="image_urls"
-                id="image_urls"
-                value={formData.image_urls}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
-              />
-            </div>
 
-            <div className="sm:col-span-2">
+            {/* <div className="sm:col-span-2">
               <label htmlFor="promo_codes" className="block text-sm font-medium text-gray-700">Promo Codes (comma separated)</label>
               <input
                 type="text"
@@ -821,7 +952,7 @@ function ProductForm({ mode, initialData, onSuccess, onCancel }: ProductFormProp
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
               />
-            </div>
+            </div> */}
           </div>
         ) : (
           <div className="bg-red-50 p-4 rounded-md">

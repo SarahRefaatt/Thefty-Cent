@@ -86,7 +86,8 @@ export async function GET(req: Request) {
         description,
         stock_quantity,
         sku,
-        category
+        category,
+        image_urls
       )
     `)
     .eq("cart_id", cart.id);
@@ -272,6 +273,43 @@ export async function PUT(req: Request) {
     }
 
     return new Response(JSON.stringify({ updatedItems: data }), { status: 200 });
+  } catch (err) {
+    return new Response(
+      JSON.stringify({ error: err || "Something went wrong" }),
+      { status: 500 }
+    );
+  }
+}
+
+
+export async function DELETE(req: Request) {
+  try {
+    const { cartId } = await req.json();
+
+    // ✅ Validate request body
+    if (!cartId) {
+      return new Response(
+        JSON.stringify({ error: "cartId is required" }),
+        { status: 400 }
+      );
+    }
+
+    // 🔥 Delete all items with this cart_id
+    const { error } = await supabase
+      .from("cart_items")
+      .delete()
+      .eq("cart_id", cartId);
+
+    if (error) {
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 500,
+      });
+    }
+
+    return new Response(
+      JSON.stringify({ message: `All items from cart ${cartId} deleted successfully` }),
+      { status: 200 }
+    );
   } catch (err) {
     return new Response(
       JSON.stringify({ error: err || "Something went wrong" }),

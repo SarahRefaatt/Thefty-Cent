@@ -335,6 +335,7 @@ interface Product {
   stock_quantity: number;
   sku: string;
   category: string;
+  image_urls: string[];
 }
 
 interface CartItem {
@@ -344,14 +345,14 @@ interface CartItem {
   product: Product;
 }
 // Helper to manage expiry
-const saveQuantitiesWithExpiry = (quantities: {[key: number]: number}) => {
-  const oneMonthLater = Date.now() + 30 * 24 * 60 * 60 * 1000; // 30 days
-  const data = {
-    quantities,
-    expiry: oneMonthLater,
-  };
-  localStorage.setItem("cartQuantities", JSON.stringify(data));
-};
+// const saveQuantitiesWithExpiry = (quantities: {[key: number]: number}) => {
+//   const oneMonthLater = Date.now() + 30 * 24 * 60 * 60 * 1000; // 30 days
+//   const data = {
+//     quantities,
+//     expiry: oneMonthLater,
+//   };
+//   localStorage.setItem("cartQuantities", JSON.stringify(data));
+// };
 
 const loadQuantitiesWithExpiry = (): {[key: number]: number} => {
   const stored = localStorage.getItem("cartQuantities");
@@ -376,7 +377,7 @@ export default function Cart() {
   const [loading, setLoading] = useState(true);
   const [removingItems, setRemovingItems] = useState<Set<number>>(new Set());
   const [shippingCost] = useState(9.99);
-  const [taxRate] = useState(0.08);
+  // const [taxRate] = useState(0.08);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const router = useRouter();
 // const { fetchCart } = useCartStore.getState();
@@ -412,7 +413,7 @@ useEffect(() => {
 
   fetchCart();
 }, []);
-
+console.log("opop: ",cartItems)
 useEffect(() => {
   setCartStoreItems(cartItems); // Sync Zustand after local updates
 }, [cartItems, setCartStoreItems]);
@@ -563,8 +564,8 @@ const updateLocalQuantity = async (id: number, newQuantity: number) => {
     return sum;
   }, 0);
 
-  const tax = subtotal * taxRate;
-  const total = subtotal + shippingCost + tax;
+  // const tax = subtotal * taxRate;
+  const total = subtotal + shippingCost;
 
   // Loading state
   if (loading) {
@@ -574,7 +575,7 @@ const updateLocalQuantity = async (id: number, newQuantity: number) => {
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Shopping Cart</h1>
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 text-center">
             <div className="flex justify-center items-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 dark:border-indigo-500"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 dark:border-black"></div>
             </div>
             <p className="text-gray-500 dark:text-gray-400 mt-4">Loading your cart...</p>
           </div>
@@ -628,14 +629,34 @@ const updateLocalQuantity = async (id: number, newQuantity: number) => {
 
                   return (
                     <div key={item.id} className="p-6 flex flex-col sm:flex-row items-start gap-4">
-                      <Image
+                      {/* <Image
                         width={160}
                         height={160}
-                        src={"/assets/IMG.JPG"}
+                        src={item.product?.image_urls[0] || "/assets/IMG.JPG"}
                         alt={product.name || 'Product image'}
                         className="w-24 h-24 object-cover rounded-md"
                       />
-                      
+                       */}
+
+
+                {item.product.image_urls && item.product.image_urls.length > 0 ? (
+                  <Image
+                    src={item.product.image_urls[0] || "/assets/IMG.JPG" }
+                    alt={item.product.name}
+                    width={160}
+                    height={160}
+                    className="object-cover w-16 h-16 group-hover:scale-105 transition-transform duration-300"
+                  onError={(e) => {
+      const target = e.currentTarget as HTMLImageElement;
+      target.src = item.product.image_urls[0]; // ✅ Stronger fallback
+    }}
+                  />
+                ) : (
+                  <div className=" w-16 h-16 bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
+                    <span className="text-gray-500">No image</span>
+                  </div>
+                )}
+
                       <div className="flex-grow">
                         <h3 className="text-lg font-medium text-gray-900 dark:text-white">{product.name}</h3>
                         <p className="text-lg font-semibold text-gray-600 dark:text-gray-400 mt-1">${product.price?.toFixed(2) || '0.00'}</p>
@@ -704,10 +725,10 @@ const updateLocalQuantity = async (id: number, newQuantity: number) => {
                   <span className="font-medium text-gray-900 dark:text-white">${shippingCost.toFixed(2)}</span>
                 </div>
                 
-                <div className="flex justify-between">
+                {/* <div className="flex justify-between">
                   <span className="text-gray-600 dark:text-gray-400">Tax</span>
                   <span className="font-medium text-gray-900 dark:text-white">${tax.toFixed(2)}</span>
-                </div>
+                </div> */}
                 
                 <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
                   <div className="flex justify-between text-lg font-bold">

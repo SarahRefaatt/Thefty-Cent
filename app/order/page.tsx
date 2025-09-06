@@ -36,7 +36,7 @@
 //   lastName: string
 //   address: string
 //   city: string
-//   zipCode: string
+//   appartment_number: string
 //   country: string
 //   paymentMethod: string
 //   saveInfo: boolean
@@ -76,9 +76,9 @@
 //     lastName: '',
 //     address: '',
 //     city: '',
-//     zipCode: '',
+//     appartment_number: '',
 //     country: 'United States',
-//     paymentMethod: 'credit_card',
+//     paymentMethod: 'cash_on_delivery',
 //     saveInfo: false
 //   })
 
@@ -124,7 +124,7 @@
 //     if (!formData.lastName) newErrors.lastName = 'Last name is required'
 //     if (!formData.address) newErrors.address = 'Address is required'
 //     if (!formData.city) newErrors.city = 'City is required'
-//     if (!formData.zipCode) newErrors.zipCode = 'Zip code is required'
+//     if (!formData.appartment_number) newErrors.appartment_number = 'Zip code is required'
 //     if (!formData.country) newErrors.country = 'Country is required'
 
 //     setErrors(newErrors)
@@ -155,7 +155,7 @@
 //     billing_address: formData.address,
 //     shipping_city: formData.city,
 //     shipping_state: "", // Optional
-//     shipping_postal_code: formData.zipCode,
+//     shipping_postal_code: formData.appartment_number,
 //     shipping_country: formData.country
 //   };
 
@@ -350,19 +350,19 @@
 //                 </div>
                 
 //                 <div>
-//                   <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700 mb-1">
+//                   <label htmlFor="appartment_number" className="block text-sm font-medium text-gray-700 mb-1">
 //                     ZIP / Postal Code *
 //                   </label>
 //                   <input
 //                     type="text"
-//                     id="zipCode"
-//                     name="zipCode"
-//                     value={formData.zipCode}
+//                     id="appartment_number"
+//                     name="appartment_number"
+//                     value={formData.appartment_number}
 //                     onChange={handleInputChange}
-//                     className={`w-full px-4 py-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500 ${errors.zipCode ? 'border-red-500' : 'border-gray-300'}`}
+//                     className={`w-full px-4 py-2 border rounded-md focus:ring-indigo-500 focus:border-indigo-500 ${errors.appartment_number ? 'border-red-500' : 'border-gray-300'}`}
 //                     placeholder="10001"
 //                   />
-//                   {errors.zipCode && <p className="mt-1 text-sm text-red-600">{errors.zipCode}</p>}
+//                   {errors.appartment_number && <p className="mt-1 text-sm text-red-600">{errors.appartment_number}</p>}
 //                 </div>
                 
 //                 <div className="md:col-span-2">
@@ -391,30 +391,30 @@
 //                 <div className="space-y-3">
 //                   <div className="flex items-center">
 //                     <input
-//                       id="credit_card"
+//                       id="cash_on_delivery"
 //                       name="paymentMethod"
 //                       type="radio"
-//                       value="credit_card"
-//                       checked={formData.paymentMethod === 'credit_card'}
+//                       value="cash_on_delivery"
+//                       checked={formData.paymentMethod === 'cash_on_delivery'}
 //                       onChange={handleInputChange}
 //                       className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
 //                     />
-//                     <label htmlFor="credit_card" className="ml-3 block text-sm font-medium text-gray-700">
-//                       InstaPay
+//                     <label htmlFor="cash_on_delivery" className="ml-3 block text-sm font-medium text-gray-700">
+//                       Instapay
 //                     </label>
 //                   </div>
                   
 //                   <div className="flex items-center">
 //                     <input
-//                       id="paypal"
+//                       id="Instapay"
 //                       name="paymentMethod"
 //                       type="radio"
-//                       value="paypal"
-//                       checked={formData.paymentMethod === 'paypal'}
+//                       value="Instapay"
+//                       checked={formData.paymentMethod === 'Instapay'}
 //                       onChange={handleInputChange}
 //                       className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
 //                     />
-//                     <label htmlFor="paypal" className="ml-3 block text-sm font-medium text-gray-700">
+//                     <label htmlFor="Instapay" className="ml-3 block text-sm font-medium text-gray-700">
 //                       Cash on Delivry
 //                     </label>
 //                   </div>
@@ -490,8 +490,8 @@ interface FormData {
   firstName: string;
   lastName: string;
   address: string;
-  city: string;
-  zipCode: string;
+  floor: string;
+  appartment_number: string;
   country: string;
   paymentMethod: string;
   saveInfo: boolean;
@@ -506,10 +506,10 @@ export default function OrderConfirmation() {
     firstName: '',
     lastName: '',
     address: '',
-    city: '',
-    zipCode: '',
+    floor: '',
+    appartment_number: '',
     country: 'United States',
-    paymentMethod: 'credit_card',
+    paymentMethod: 'cash_on_delivery',
     saveInfo: false
   });
   const [errors, setErrors] = useState<Partial<FormData>>({});
@@ -546,8 +546,8 @@ export default function OrderConfirmation() {
   }, 0);
   
   const shippingCost = 9.99;
-  const tax = subtotal * 0.08;
-  const total = subtotal + shippingCost + tax;
+  // const tax = subtotal * 0.08;
+  const total = subtotal + shippingCost ;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -581,22 +581,19 @@ export default function OrderConfirmation() {
       newErrors.email = 'Please enter a valid email address';
     }
     
-    if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
-    } else if (!/^[\+]?[1-9][\d]{0,15}$/.test(formData.phone.replace(/\D/g, ''))) {
-      newErrors.phone = 'Please enter a valid phone number';
-    }
+if (!formData.phone.trim()) {
+  newErrors.phone = 'Phone number is required';
+} else if (!/^0\d{9,14}$/.test(formData.phone.replace(/\D/g, ''))) {
+  newErrors.phone = 'Please enter a valid phone number starting with 0';
+}
+
     
     if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
     if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
     if (!formData.address.trim()) newErrors.address = 'Address is required';
-    if (!formData.city.trim()) newErrors.city = 'City is required';
-    
-    if (!formData.zipCode.trim()) {
-      newErrors.zipCode = 'Zip code is required';
-    } else if (!/^\d{5}(-\d{4})?$/.test(formData.zipCode)) {
-      newErrors.zipCode = 'Please enter a valid zip code';
-    }
+    if (!formData.floor.trim()) newErrors.floor = 'floor is required';
+    if (!formData.appartment_number.trim()) newErrors.appartment_number = 'appartment_number is required';
+
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -627,9 +624,9 @@ export default function OrderConfirmation() {
         payment_status: "unpaid",
         shipping_address: formData.address.trim(),
         billing_address: formData.address.trim(),
-        shipping_city: formData.city.trim(),
+        floor: formData.floor.trim(),
         shipping_state: "",
-        shipping_postal_code: formData.zipCode.trim(),
+        shipping_postal_code: formData.appartment_number.trim(),
         shipping_country: formData.country,
         order_total: total,
         items: cartItems.map(item => ({
@@ -684,7 +681,7 @@ export default function OrderConfirmation() {
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="bg-white rounded-lg shadow-md p-8 text-center">
             <div className="flex justify-center items-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
             </div>
             <p className="text-gray-500 mt-4">Loading your order...</p>
           </div>
@@ -815,7 +812,7 @@ return (
                       ? 'border-red-500 dark:border-red-400 text-red-900 dark:text-red-100 placeholder-red-300 dark:placeholder-red-700' 
                       : 'border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400'
                   } bg-white dark:bg-gray-700`}
-                  placeholder="(555) 123-4567"
+                  placeholder=""
                 />
                 {errors.phone && (
                   <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.phone}</p>
@@ -847,46 +844,46 @@ return (
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div>
-                <label htmlFor="city" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  City *
+                <label htmlFor="floor" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Appartment Number*
                 </label>
                 <input
                   type="text"
-                  id="city"
-                  name="city"
-                  value={formData.city}
+                  id="floor"
+                  name="floor"
+                  value={formData.floor}
                   onChange={handleInputChange}
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 ${
-                    errors.city 
+                    errors.floor 
                       ? 'border-red-500 dark:border-red-400 text-red-900 dark:text-red-100 placeholder-red-300 dark:placeholder-red-700' 
                       : 'border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400'
                   } bg-white dark:bg-gray-700`}
-                  placeholder="New York"
+                  placeholder=""
                 />
-                {errors.city && (
-                  <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.city}</p>
+                {errors.floor && (
+                  <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.floor}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  ZIP Code *
+                <label htmlFor="appartment_number" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Floor*
                 </label>
                 <input
                   type="text"
-                  id="zipCode"
-                  name="zipCode"
-                  value={formData.zipCode}
+                  id="appartment_number"
+                  name="appartment_number"
+                  value={formData.appartment_number}
                   onChange={handleInputChange}
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 ${
-                    errors.zipCode 
+                    errors.appartment_number 
                       ? 'border-red-500 dark:border-red-400 text-red-900 dark:text-red-100 placeholder-red-300 dark:placeholder-red-700' 
                       : 'border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400'
                   } bg-white dark:bg-gray-700`}
-                  placeholder="10001"
+                  placeholder=""
                 />
-                {errors.zipCode && (
-                  <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.zipCode}</p>
+                {errors.appartment_number && (
+                  <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.appartment_number}</p>
                 )}
               </div>
 
@@ -916,8 +913,8 @@ return (
                   <input
                     type="radio"
                     name="paymentMethod"
-                    value="credit_card"
-                    checked={formData.paymentMethod === 'credit_card'}
+                    value="cash_on_delivery"
+                    checked={formData.paymentMethod === 'cash_on_delivery'}
                     onChange={handleInputChange}
                     className="h-4 w-4 text-indigo-600 dark:text-indigo-400 focus:ring-indigo-500 dark:focus:ring-indigo-400 border-gray-300 dark:border-gray-600"
                   />
@@ -927,12 +924,12 @@ return (
                   <input
                     type="radio"
                     name="paymentMethod"
-                    value="paypal"
-                    checked={formData.paymentMethod === 'paypal'}
+                    value="Instapay"
+                    checked={formData.paymentMethod === 'Instapay'}
                     onChange={handleInputChange}
                     className="h-4 w-4 text-indigo-600 dark:text-indigo-400 focus:ring-indigo-500 dark:focus:ring-indigo-400 border-gray-300 dark:border-gray-600"
                   />
-                  <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">InstaPay</span>
+                  <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">Instapay</span>
                 </label>
               </div>
             </div>
@@ -971,10 +968,7 @@ return (
                 <span className="font-medium text-gray-900 dark:text-white">${shippingCost.toFixed(2)}</span>
               </div>
               
-              <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">Tax</span>
-                <span className="font-medium text-gray-900 dark:text-white">${tax.toFixed(2)}</span>
-              </div>
+             
               
               <div className="flex justify-between text-lg font-bold border-t border-gray-200 dark:border-gray-700 pt-3">
                 <span className="text-gray-900 dark:text-white">Total</span>

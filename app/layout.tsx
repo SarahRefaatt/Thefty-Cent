@@ -5,6 +5,7 @@ import { Providers } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/site-header"
 import Footer from "@/components/footer";
 import { ThemeProvider } from "next-themes";
+import HeaderWrapper from "@/components/header-wrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,6 +27,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en" suppressHydrationWarning>
       {/* <body
@@ -35,7 +37,7 @@ export default function RootLayout({
       </body> */}
 
        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-         <SiteHeader />
+        <HeaderWrapper /> {/* Header logic moved here */}
         <Providers>
            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
