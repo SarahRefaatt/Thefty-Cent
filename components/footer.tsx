@@ -85,7 +85,9 @@ export default function Footer() {
                 <svg className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                 </svg>
-                <Link href={`TheftyCent@gmail.com`}>TheftyCent@gmail.com</Link>
+<Link href="mailto:TheftyCent@gmail.com?subject=Support Request&body=Hello,%20I%20need%20help%20with...">
+  TheftyCent@gmail.com
+</Link>
                 
               </p>
               {/* <p className="text-gray-400 text-sm">We respond within 24 hours</p> */}
