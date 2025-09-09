@@ -164,6 +164,8 @@ export async function POST(req: Request) {
     shipping_state,
     appartment_number,
     shipping_country,
+    area,
+    shipping_city
   } = await req.json();
 
   // const { data, error } = await supabase.rpc("create_order_with_items", {
@@ -196,6 +198,9 @@ const { data, error } = await supabase.rpc("create_order_with_items", {
   p_shipping_country: shipping_country,
   p_shipping_state: shipping_state,
   p_status: status,
+  p_area:area,
+  p_shipping_city:shipping_city,
+  p_appartment_number:appartment_number
   
 });
 
